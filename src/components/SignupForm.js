@@ -1,31 +1,59 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import SignupSchema from "../schemas/signup_validation";
-// import axios from 'axios';
+import SignupSchema from "../validation_schemas/SignUpSchema";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../contexts/UserContext";
+import Cookies from 'js-cookie';
 
 const SignupForm = () => {
+    const navigate = useNavigate();
+    const { user, signUser } = useContext(UserContext);
+    const [errors, setErrors] = useState([]);
     const initialValues = {
         email: "",
         username: "",
         password: "",
         password_confirmation: ""
     }
+
+    useEffect(() => {
+        if(user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
     
     return (
         <div className="form">
             <h2>Sign Up</h2>
+            <ul>
+                {errors.map((error, index) => {
+                    return (
+                        <li key={index} className="error">{ error }</li>
+                    );
+                })}
+            </ul>
             <Formik
                 initialValues={initialValues}
                 validationSchema={SignupSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    // console.log(values);
-                    // axios.post('http://localhost:3000/users', { user: values })
-                    // .then(response => {
-                    //     console.log("Response")
-                    //     console.log(response);
-                    // })
-                    // .catch(error => {
-                    //     console.error('Error:', error);
-                    // });
+                    const userData = { user: values };
+
+                    axios.post('http://localhost:3000/users', userData)
+                    .then(response => {
+                        if(response.status === 201) {
+                            signUser(response.data.user)
+                            Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+                            navigate('/home');
+                        } 
+                        else {
+                            console.error('Resource creation failed. Status code:', response.status);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error: ', error.response.data.errors);
+                        setErrors(error.response.data.errors);
+                    });
                     setSubmitting(false)
                 }}
             >
@@ -45,7 +73,7 @@ const SignupForm = () => {
                             type="text" 
                             id="username" 
                             name="username" 
-                            placeholder="username"
+                            placeholder="username (alphanumeric)"
                         />
                         <ErrorMessage name="username" component="p" className="error"></ErrorMessage>
 
@@ -54,7 +82,7 @@ const SignupForm = () => {
                             type="password" 
                             id="password" 
                             name="password" 
-                            placeholder="password"    
+                            placeholder="password (at least 6 characters)"    
                         />
                         <ErrorMessage name="password" component="p" className="error"></ErrorMessage>
 
@@ -68,6 +96,7 @@ const SignupForm = () => {
                         <ErrorMessage name="password_confirmation" component="p" className="error"></ErrorMessage>
                     
                         <button type="submit" disabled={isSubmitting}>Submit</button>
+                        
                     </Form>
                 )}
 

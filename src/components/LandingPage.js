@@ -2,21 +2,19 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const LandingPage = () => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        if(!user) {
-            navigate('/sign_in');
+        if(user) {
+            navigate('/home');
         }
     }, [user, navigate]);
 
     return ( 
-        <div>
-            { user && <h2 className="content">Welcome { user.username || user.email_or_username }!</h2> }
-        </div>
+        <h2 className="content">Welcome to Blog App!</h2>
      );
 }
  
-export default Home;
+export default LandingPage;
