@@ -1,0 +1,108 @@
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import SignupSchema from "../validation_schemas/SignUpSchema";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../contexts/UserContext";
+import Cookies from 'js-cookie';
+
+const SignupForm = () => {
+    const navigate = useNavigate();
+    const { user, signUser } = useContext(UserContext);
+    const [errors, setErrors] = useState([]);
+    const initialValues = {
+        email: "",
+        username: "",
+        password: "",
+        password_confirmation: ""
+    }
+
+    useEffect(() => {
+        if(user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
+    
+    return (
+        <div className="form">
+            <h2>Sign Up</h2>
+            <ul>
+                {errors.map((error, index) => {
+                    return (
+                        <li key={index} className="error">{ error }</li>
+                    );
+                })}
+            </ul>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={SignupSchema}
+                onSubmit={(values, { setSubmitting }) => {
+                    const userData = { user: values };
+
+                    axios.post('http://localhost:3000/users', userData)
+                    .then(response => {
+                        if(response.status === 201) {
+                            signUser(response.data.user)
+                            Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+                            navigate('/home');
+                        } 
+                        else {
+                            console.error('Resource creation failed. Status code:', response.status);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error: ', error.response.data.errors);
+                        setErrors(error.response.data.errors);
+                    });
+                    setSubmitting(false)
+                }}
+            >
+                {({ isSubmitting }) => (
+                    <Form>
+                        <label htmlFor="email">Email</label>
+                        <Field 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="email"
+                        />
+                        <ErrorMessage name="email" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="username">Username</label>
+                        <Field 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            placeholder="username (alphanumeric)"
+                        />
+                        <ErrorMessage name="username" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="password">Passwod</label>
+                        <Field 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="password (at least 6 characters)"    
+                        />
+                        <ErrorMessage name="password" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="password_confirmation">Confirm Password</label>
+                        <Field 
+                            type="password" 
+                            id="password_confirmation" 
+                            name="password_confirmation" 
+                            placeholder="confirm-password"  
+                        />
+                        <ErrorMessage name="password_confirmation" component="p" className="error"></ErrorMessage>
+                    
+                        <button type="submit" disabled={isSubmitting}>Submit</button>
+                        
+                    </Form>
+                )}
+
+            </Formik>
+        </div> 
+     );
+}
+ 
+export default SignupForm;
