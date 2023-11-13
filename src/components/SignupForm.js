@@ -1,20 +1,42 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import SignupSchema from "../validation_schemas/SignUpSchema";
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import Cookies from 'js-cookie';
+// import { graphql } from 'relay-runtime';
+import { useMutation } from 'react-relay';
+import graphql from 'babel-plugin-relay/macro';
+
+const SignupFormMutation = graphql`
+  mutation SignupFormMutation(
+    $input: SignUpUserInput!
+  ) {
+    signUpUser(
+        input: $input
+    ) {
+      user {
+        id
+        email
+        username
+      }
+      errors
+    }
+  }
+`;
+
 
 const SignupForm = () => {
     const navigate = useNavigate();
+    const [commitMutation, isMutationInFlight] = useMutation(SignupFormMutation);
     const { user, signUser } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const initialValues = {
         email: "",
         username: "",
         password: "",
-        password_confirmation: ""
+        passwordConfirmation: ""
     }
 
     useEffect(() => {
@@ -39,21 +61,41 @@ const SignupForm = () => {
                 onSubmit={(values, { setSubmitting }) => {
                     const userData = { user: values };
 
-                    axios.post('http://localhost:3000/users', userData)
-                    .then(response => {
-                        if(response.status === 201) {
-                            signUser(response.data.user)
-                            Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-                            navigate('/home');
-                        } 
-                        else {
-                            console.error('Resource creation failed. Status code:', response.status);
+                    // axios.post('http://localhost:3000/users', userData)
+                    // .then(response => {
+                    //     if(response.status === 201) {
+                    //         signUser(response.data.user)
+                    //         Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+                    //         navigate('/home');
+                    //     } 
+                    //     else {
+                    //         console.error('Resource creation failed. Status code:', response.status);
+                    //     }
+                    // })
+                    // .catch(error => {
+                    //     console.error('Error: ', error.response.data.errors);
+                    //     setErrors(error.response.data.errors);
+                    // });
+               
+                    commitMutation({
+                        variables: {
+                            input: userData
+                        },
+                        onCompleted: (response) => {
+                            if(response.signUpUser.errors.length > 0) {
+                                setErrors(response.signUpUser.errors)
+                            } else {
+                                signUser(response.signUpUser.user)
+                                Cookies.set('user', JSON.stringify(response.signUpUser.user), { expires: 7 });
+                                navigate('/home');
+                            }
+                        },
+                        onError: (error) => {
+                            console.log("Error:", error)
+                            setErrors(["Can't perform the sign-up operation"])
                         }
                     })
-                    .catch(error => {
-                        console.error('Error: ', error.response.data.errors);
-                        setErrors(error.response.data.errors);
-                    });
+
                     setSubmitting(false)
                 }}
             >
@@ -86,16 +128,16 @@ const SignupForm = () => {
                         />
                         <ErrorMessage name="password" component="p" className="error"></ErrorMessage>
 
-                        <label htmlFor="password_confirmation">Confirm Password</label>
+                        <label htmlFor="passwordConfirmation">Confirm Password</label>
                         <Field 
                             type="password" 
-                            id="password_confirmation" 
-                            name="password_confirmation" 
+                            id="passwordConfirmation" 
+                            name="passwordConfirmation" 
                             placeholder="confirm-password"  
                         />
-                        <ErrorMessage name="password_confirmation" component="p" className="error"></ErrorMessage>
+                        <ErrorMessage name="passwordConfirmation" component="p" className="error"></ErrorMessage>
                     
-                        <button type="submit" disabled={isSubmitting}>Submit</button>
+                        <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
                         
                     </Form>
                 )}
