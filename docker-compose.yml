@@ -1,0 +1,15 @@
+version: '2.23'
+
+services:
+  frontend:
+    build: .
+
+    image: frontend
+    
+    container_name: frontend_c
+
+    ports:
+      - "4000:4000"
+
+    volumes:
+      - .:/frontend
