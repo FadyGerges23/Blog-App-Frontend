@@ -1,0 +1,39 @@
+type User {
+  id: ID!
+  email: String!
+  username: String!
+}
+
+input SignUpUserInput {
+  email: String!
+  username: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+type SignUpUserPayload {
+  user: User!
+  errors: [String!]
+}
+
+input SignInUserInput {
+  emailOrUsername: String!
+  password: String!
+}
+
+type SignInUserPayload {
+  user: User!
+  errors: [String!]
+}
+
+input SignOutUserInput
+
+type SignOutUserPayload {
+  isSignOutSuccessful: Boolean
+}
+
+type Mutation {
+  signUpUser(input: SignUpUserInput!): SignUpUserPayload!
+  signInUser(input: SignInUserInput!): SignInUserPayload!
+  signOutUser(input: SignOutUserInput!): SignOutUserPayload!
+}

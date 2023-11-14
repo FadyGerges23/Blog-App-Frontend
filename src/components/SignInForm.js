@@ -1,17 +1,38 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import SignInSchema from "../validation_schemas/SignInSchema";
-import axios from 'axios';
+// import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import Cookies from 'js-cookie';
+import { useMutation } from 'react-relay';
+import graphql from 'babel-plugin-relay/macro';
+
+const SignInFormMutation = graphql`
+  mutation SignInFormMutation(
+    $input: SignInUserInput!
+  ) {
+    signInUser(
+        input: $input
+    ) {
+      user {
+        id
+        email
+        username
+      }
+      errors
+    }
+  }
+`;
+
 
 const SignInForm = () => {
     const navigate = useNavigate();
+    const [commitMutation, isMutationInFlight] = useMutation(SignInFormMutation);
     const { user, signUser } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const initialValues = {
-        email_or_username: "",
+        emailOrUsername: "",
         password: ""
     }
 
@@ -37,34 +58,54 @@ const SignInForm = () => {
                 onSubmit={(values, { setSubmitting }) => {
                     const userData = { user: values };
 
-                    axios.post('http://localhost:3000/users/sign_in', userData)
-                    .then(response => {
-                        if(response.status === 200) {
-                            signUser(response.data.user)
-                            Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-                            navigate('/home');
-                        }
-                        else {
-                            console.log("Error occurred while trying to sign-in. Status code: ", response.status)
+                    // axios.post('http://localhost:3000/users/sign_in', userData)
+                    // .then(response => {
+                    //     if(response.status === 200) {
+                    //         signUser(response.data.user)
+                    //         Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+                    //         navigate('/home');
+                    //     }
+                    //     else {
+                    //         console.log("Error occurred while trying to sign-in. Status code: ", response.status)
+                    //     }
+                    // })
+                    // .catch(error => {
+                    //     console.error('Error:', error.response.data.errors);
+                    //     setErrors(error.response.data.errors);
+                    // });
+
+                    commitMutation({
+                        variables: {
+                            input: userData
+                        },
+                        onCompleted: (response) => {
+                            if(response.signInUser.errors.length > 0) {
+                                setErrors(response.signInUser.errors)
+                            } else {
+                                signUser(response.signInUser.user)
+                                Cookies.set('user', JSON.stringify(response.signInUser.user), { expires: 7 });
+                                navigate('/home');
+                            }
+                        },
+                        onError: (error) => {
+                            console.log("Error:", error)
+                            setErrors(["Can't perform the sign-in operation"])
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error.response.data.errors);
-                        setErrors(error.response.data.errors);
-                    });
+
                     setSubmitting(false)
                 }}
             >
                 {({ isSubmitting }) => (
                     <Form>
-                        <label htmlFor="email_or_username">Email or Username</label>
+                        <label htmlFor="emailOrUsername">Email or Username</label>
                         <Field 
                             type="text" 
-                            id="email_or_username" 
-                            name="email_or_username" 
+                            id="emailOrUsername" 
+                            name="emailOrUsername" 
                             placeholder="email or username"
                         />
-                        <ErrorMessage name="email_or_username" component="p" className="error"></ErrorMessage>
+                        <ErrorMessage name="emailOrUsername" component="p" className="error"></ErrorMessage>
 
                         <label htmlFor="password">Passwod</label>
                         <Field 
@@ -75,7 +116,7 @@ const SignInForm = () => {
                         />
                         <ErrorMessage name="password" component="p" className="error"></ErrorMessage>
 
-                        <button type="submit" disabled={isSubmitting}>Submit</button>
+                        <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
                     </Form>
                 )}
 
