@@ -2,6 +2,7 @@ type User {
   id: ID!
   email: String!
   username: String!
+  token: String!
 }
 
 input SignUpUserInput {
@@ -32,8 +33,23 @@ type SignOutUserPayload {
   isSignOutSuccessful: Boolean
 }
 
+input EditUserInput {
+  email: String!
+  username: String!
+  password: String
+  passwordConfirmation: String
+  currentPassword: String!
+  token: String!
+}
+
+type EditUserPayload {
+  user: User!
+  errors: [String!]
+}
+
 type Mutation {
   signUpUser(input: SignUpUserInput!): SignUpUserPayload!
   signInUser(input: SignInUserInput!): SignInUserPayload!
   signOutUser(input: SignOutUserInput!): SignOutUserPayload!
+  editUser(input: EditUserInput!): EditUserPayload!
 }

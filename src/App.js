@@ -1,6 +1,8 @@
 import Home from "./components/Home";
 import SignInForm from "./components/SignInForm";
 import SignupForm from "./components/SignupForm";
+import ViewProfile from './components/ViewProfile';
+import EditProfile from './components/EditProfile';
 import { 
   createBrowserRouter,
   Route,
@@ -20,6 +22,8 @@ const router = createBrowserRouter(
       <Route path="/home" element={ <Home /> } />
       <Route path="/sign_up" element={ <SignupForm /> } />
       <Route path="/sign_in" element={ <SignInForm /> } />
+      <Route path="/view_profile" element={ <ViewProfile /> } />
+      <Route path="/edit_profile" element={ <EditProfile /> } />
     </Route>
   )
 );
@@ -31,7 +35,7 @@ function App() {
     const userCookie = Cookies.get('user');
     if(userCookie) {
         try {
-            signUser(JSON.parse(userCookie).user);
+            signUser(JSON.parse(userCookie));
         }
         catch(error) {
             console.error('Error parsing user data from the cookie:', error);

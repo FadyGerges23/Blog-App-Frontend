@@ -14,7 +14,7 @@ const Home = () => {
 
     return ( 
         <div>
-            { user && <h2 className="content">Welcome { user.username || user.email_or_username }!</h2> }
+            { user && <h2 className="content">Welcome { user.username }!</h2> }
         </div>
      );
 }
