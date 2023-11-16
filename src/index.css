@@ -51,7 +51,8 @@ header a.active {
   font-weight: bold;
   transition: background-color 0.3s;
   padding: 0;
-  font-size: 16px;
+  font-size: medium;
+  margin-bottom: 4px;
 }
 
 /* Style for form */
@@ -107,4 +108,57 @@ button[type="submit"]:hover {
 
 ul {
   padding-inline-start: 10px;
+}
+
+.profile-container {
+  padding: 20px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+}
+
+.profile {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 400px;
+  
+}
+
+.heading {
+  color: #333;
+}
+
+.user-info {
+  margin-bottom: 15px;
+}
+
+.info-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.info-value {
+  color: #555;
+}
+
+.edit-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  left: 45%;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
 }

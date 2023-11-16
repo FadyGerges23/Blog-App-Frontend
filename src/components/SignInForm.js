@@ -19,6 +19,8 @@ const SignInFormMutation = graphql`
         id
         email
         username
+        displayName
+        token
       }
       errors
     }

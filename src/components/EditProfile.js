@@ -1,19 +1,18 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import SignupSchema from "../validation_schemas/SignUpSchema";
-// import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import EditProfileSchema from "../validation_schemas/EditProfileSchema";
+import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-// import { graphql } from 'relay-runtime';
 import { useMutation } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
+// import axios from 'axios';
 
-const SignupFormMutation = graphql`
-  mutation SignupFormMutation(
-    $input: SignUpUserInput!
+const EditProfileMutation = graphql`
+  mutation EditProfileMutation(
+    $input: EditUserInput!
   ) {
-    signUpUser(
+    editUser(
         input: $input
     ) {
       user {
@@ -21,36 +20,29 @@ const SignupFormMutation = graphql`
         email
         username
         displayName
-        token
       }
       errors
     }
   }
 `;
 
-
-const SignupForm = () => {
+const EditProfile = () => {
     const navigate = useNavigate();
-    const [commitMutation, isMutationInFlight] = useMutation(SignupFormMutation);
     const { user, signUser } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
-    const initialValues = {
-        email: "",
-        username: "",
-        displayName: "",
+    const initialValues = { 
+        email: user ? user.email : "",
+        username: user ? user.username : "",
+        displayName: user ? user.displayName : "",
         password: "",
-        passwordConfirmation: ""
-    }
-
-    useEffect(() => {
-        if(user) {
-            navigate('/home');
-        }
-    }, [user, navigate]);
+        passwordConfirmation: "",
+        currentPassword: ""
+    };
+    const [commitMutation, isMutationInFlight] = useMutation(EditProfileMutation);
     
-    return (
+    return ( 
         <div className="form">
-            <h2>Sign Up</h2>
+            <h2>Edit Profile</h2>
             <ul>
                 {errors.map((error, index) => {
                     return (
@@ -60,37 +52,43 @@ const SignupForm = () => {
             </ul>
             <Formik
                 initialValues={initialValues}
-                validationSchema={SignupSchema}
+                validationSchema={EditProfileSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    const userData = { user: values };
-
-                    // axios.post('http://localhost:3000/users', userData)
+                    const token = user.token;
+                    const userData = { user: values }
+                    // axios.put('http://localhost:3000/users', userData, {
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //         Authorization: `Bearer ${token}`,
+                    //       },
+                    // })
                     // .then(response => {
-                    //     if(response.status === 201) {
+                    //     console.log(response.data.user)
+                    //     if(response.status === 200) {
                     //         signUser(response.data.user)
-                    //         Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-                    //         navigate('/home');
-                    //     } 
+                    //         Cookies.set('user', JSON.stringify(response.data.user), { expires: 7 });
+                    //         navigate('/view_profile');
+                    //     }
                     //     else {
-                    //         console.error('Resource creation failed. Status code:', response.status);
+                    //         console.log("Error occurred while trying to sign-in. Status code: ", response.status)
                     //     }
                     // })
                     // .catch(error => {
-                    //     console.error('Error: ', error.response.data.errors);
+                    //     console.error('Error:', error.response.data.errors);
                     //     setErrors(error.response.data.errors);
                     // });
-               
+
                     commitMutation({
                         variables: {
                             input: userData
                         },
                         onCompleted: (response) => {
-                            if(response.signUpUser.errors.length > 0) {
-                                setErrors(response.signUpUser.errors)
+                            if(response.editUser.errors.length > 0) {
+                                setErrors(response.editUser.errors)
                             } else {
-                                signUser(response.signUpUser.user)
-                                Cookies.set('user', JSON.stringify(response.signUpUser.user), { expires: 7 });
-                                navigate('/home');
+                                signUser({...response.editUser.user, token: token})
+                                Cookies.set('user', JSON.stringify({...response.editUser.user, token: token}), { expires: 7 });
+                                navigate('/view_profile');
                             }
                         },
                         onError: (error) => {
@@ -145,9 +143,18 @@ const SignupForm = () => {
                             type="password" 
                             id="passwordConfirmation" 
                             name="passwordConfirmation" 
-                            placeholder="confirm-password"  
+                            placeholder="confirm password"  
                         />
                         <ErrorMessage name="passwordConfirmation" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="currentPassword">Current Password</label>
+                        <Field 
+                            type="password" 
+                            id="currentPassword" 
+                            name="currentPassword" 
+                            placeholder="current password"  
+                        />
+                        <ErrorMessage name="currentPassword" component="p" className="error"></ErrorMessage>
                     
                         <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
                         
@@ -156,7 +163,9 @@ const SignupForm = () => {
 
             </Formik>
         </div> 
+
+
      );
 }
  
-export default SignupForm;
+export default EditProfile;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<989804ede07b7718c781427fe78a1383>>
+ * @generated SignedSource<<b29d15b4732df70ffabbe88724866c6f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -59,6 +59,20 @@ v1 = [
             "kind": "ScalarField",
             "name": "username",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "displayName",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "token",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -92,16 +106,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "59e40cb88accfa131123ea85d2651ab7",
+    "cacheID": "0b1279bb16f3bfe222227cdb87aaa531",
     "id": null,
     "metadata": {},
     "name": "SignInFormMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInFormMutation(\n  $input: SignInUserInput!\n) {\n  signInUser(input: $input) {\n    user {\n      id\n      email\n      username\n    }\n    errors\n  }\n}\n"
+    "text": "mutation SignInFormMutation(\n  $input: SignInUserInput!\n) {\n  signInUser(input: $input) {\n    user {\n      id\n      email\n      username\n      displayName\n      token\n    }\n    errors\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "73fc63340712a5b2fca1d7c22948ab98";
+node.hash = "722f88be71263b87b17c896594a805d9";
 
 module.exports = node;

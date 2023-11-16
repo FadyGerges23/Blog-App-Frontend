@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3fee7f216030223d4cc5644abcea344d>>
+ * @generated SignedSource<<8c3605b45a3f792514f2ad2abc3563ff>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,9 +26,9 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "SignUpUserPayload",
+    "concreteType": "EditUserPayload",
     "kind": "LinkedField",
-    "name": "signUpUser",
+    "name": "editUser",
     "plural": false,
     "selections": [
       {
@@ -66,13 +66,6 @@ v1 = [
             "kind": "ScalarField",
             "name": "displayName",
             "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "token",
-            "storageKey": null
           }
         ],
         "storageKey": null
@@ -93,7 +86,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "SignupFormMutation",
+    "name": "EditProfileMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -102,20 +95,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "SignupFormMutation",
+    "name": "EditProfileMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c5a4f49a77e9b1a772a7c42288c2ae04",
+    "cacheID": "34d1de312ea0c8dab260bc286d8ece8d",
     "id": null,
     "metadata": {},
-    "name": "SignupFormMutation",
+    "name": "EditProfileMutation",
     "operationKind": "mutation",
-    "text": "mutation SignupFormMutation(\n  $input: SignUpUserInput!\n) {\n  signUpUser(input: $input) {\n    user {\n      id\n      email\n      username\n      displayName\n      token\n    }\n    errors\n  }\n}\n"
+    "text": "mutation EditProfileMutation(\n  $input: EditUserInput!\n) {\n  editUser(input: $input) {\n    user {\n      id\n      email\n      username\n      displayName\n    }\n    errors\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "a120229004eaa95a9fdaf2e7ad110c68";
+node.hash = "11c4f57a9fb90a075ea6ffdbbbbfd9a6";
 
 module.exports = node;

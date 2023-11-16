@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const {
     Environment,
     Network,
@@ -13,8 +15,11 @@ function fetchQuery(
   ) {
     return fetch('http://127.0.0.1:5000/graphql', {
       method: 'POST',
-      headers: {
+      headers: Cookies.get('user') ? {
         // Add authentication and other headers here
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${JSON.parse(Cookies.get('user')).token}`
+      } : {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
