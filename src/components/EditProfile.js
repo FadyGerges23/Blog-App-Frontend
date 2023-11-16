@@ -53,8 +53,7 @@ const EditProfile = () => {
                 validationSchema={EditProfileSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     const token = user.token;
-                    const userData = { user: {...values, token: token} }
-                    // const token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjNDIwMjE2YS05Yjc5LTRhYzktOTE1Ny04ODU0MjgxMWMzODIiLCJzdWIiOiI4NiIsInNjcCI6InVzZXIiLCJhdWQiOm51bGwsImlhdCI6MTcwMDA1MzYzMywiZXhwIjoxNzAwMDU1NDMzfQ.pUu8dIx2EPEo3rtXMQeJY0ASrfiUMKiAtTdBNKSk7KU";
+                    const userData = { user: values }
                     // axios.put('http://localhost:3000/users', userData, {
                     //     headers: {
                     //         'Content-Type': 'application/json',

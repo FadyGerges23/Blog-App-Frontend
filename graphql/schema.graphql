@@ -39,7 +39,6 @@ input EditUserInput {
   password: String
   passwordConfirmation: String
   currentPassword: String!
-  token: String!
 }
 
 type EditUserPayload {
