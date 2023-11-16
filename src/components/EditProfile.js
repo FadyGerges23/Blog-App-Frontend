@@ -19,6 +19,7 @@ const EditProfileMutation = graphql`
         id
         email
         username
+        displayName
       }
       errors
     }
@@ -32,6 +33,7 @@ const EditProfile = () => {
     const initialValues = { 
         email: user ? user.email : "",
         username: user ? user.username : "",
+        displayName: user ? user.displayName : "",
         password: "",
         passwordConfirmation: "",
         currentPassword: ""
@@ -117,6 +119,15 @@ const EditProfile = () => {
                             placeholder="username (alphanumeric)"
                         />
                         <ErrorMessage name="username" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="displayName">Display Name</label>
+                        <Field 
+                            type="text" 
+                            id="displayName" 
+                            name="displayName" 
+                            placeholder="display name"
+                        />
+                        <ErrorMessage name="displayName" component="p" className="error"></ErrorMessage>
 
                         <label htmlFor="password">Passwod</label>
                         <Field 

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0043c383ea45f29d8f42d60e41921c6b>>
+ * @generated SignedSource<<3fee7f216030223d4cc5644abcea344d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -64,6 +64,13 @@ v1 = [
             "alias": null,
             "args": null,
             "kind": "ScalarField",
+            "name": "displayName",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
             "name": "token",
             "storageKey": null
           }
@@ -99,16 +106,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "4f94de5257953f82957a6510b7da3571",
+    "cacheID": "c5a4f49a77e9b1a772a7c42288c2ae04",
     "id": null,
     "metadata": {},
     "name": "SignupFormMutation",
     "operationKind": "mutation",
-    "text": "mutation SignupFormMutation(\n  $input: SignUpUserInput!\n) {\n  signUpUser(input: $input) {\n    user {\n      id\n      email\n      username\n      token\n    }\n    errors\n  }\n}\n"
+    "text": "mutation SignupFormMutation(\n  $input: SignUpUserInput!\n) {\n  signUpUser(input: $input) {\n    user {\n      id\n      email\n      username\n      displayName\n      token\n    }\n    errors\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "d6f791404eba9f896ca21fa7d7dea4a7";
+node.hash = "a120229004eaa95a9fdaf2e7ad110c68";
 
 module.exports = node;

@@ -5,6 +5,7 @@ const alphanumeric = /^[a-zA-Z0-9]+$/
 const EditProfileSchema = yup.object().shape({
     email: yup.string().email("Please enter a valid email!").required("Required"),    
     username: yup.string().matches(alphanumeric, { message: "Username can contain numbers and letters only (alphanumeric)" }).required("Required!"),
+    displayName: yup.string().required("Required!"),
     password: yup.string().min(6, "Password must be at least 6 characters long"),    
     passwordConfirmation: yup.string().notRequired()
     .when('password', {

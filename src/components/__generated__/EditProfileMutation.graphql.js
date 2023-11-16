@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b1bf236825b4a199222ef34dfdbecb39>>
+ * @generated SignedSource<<8c3605b45a3f792514f2ad2abc3563ff>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -59,6 +59,13 @@ v1 = [
             "kind": "ScalarField",
             "name": "username",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "displayName",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -92,16 +99,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "35d5724711469f7613a38ac296f9540d",
+    "cacheID": "34d1de312ea0c8dab260bc286d8ece8d",
     "id": null,
     "metadata": {},
     "name": "EditProfileMutation",
     "operationKind": "mutation",
-    "text": "mutation EditProfileMutation(\n  $input: EditUserInput!\n) {\n  editUser(input: $input) {\n    user {\n      id\n      email\n      username\n    }\n    errors\n  }\n}\n"
+    "text": "mutation EditProfileMutation(\n  $input: EditUserInput!\n) {\n  editUser(input: $input) {\n    user {\n      id\n      email\n      username\n      displayName\n    }\n    errors\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "688f295d5dcff97067a9217df6e4718a";
+node.hash = "11c4f57a9fb90a075ea6ffdbbbbfd9a6";
 
 module.exports = node;

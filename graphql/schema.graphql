@@ -2,12 +2,14 @@ type User {
   id: ID!
   email: String!
   username: String!
+  displayName: String
   token: String!
 }
 
 input SignUpUserInput {
   email: String!
   username: String!
+  displayName: String!
   password: String!
   passwordConfirmation: String!
 }
@@ -36,6 +38,7 @@ type SignOutUserPayload {
 input EditUserInput {
   email: String!
   username: String!
+  displayName: String!
   password: String
   passwordConfirmation: String
   currentPassword: String!

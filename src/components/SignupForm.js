@@ -20,6 +20,7 @@ const SignupFormMutation = graphql`
         id
         email
         username
+        displayName
         token
       }
       errors
@@ -36,6 +37,7 @@ const SignupForm = () => {
     const initialValues = {
         email: "",
         username: "",
+        displayName: "",
         password: "",
         passwordConfirmation: ""
     }
@@ -119,6 +121,15 @@ const SignupForm = () => {
                             placeholder="username (alphanumeric)"
                         />
                         <ErrorMessage name="username" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="displayName">Display Name</label>
+                        <Field 
+                            type="text" 
+                            id="displayName" 
+                            name="displayName" 
+                            placeholder="display name"
+                        />
+                        <ErrorMessage name="displayName" component="p" className="error"></ErrorMessage>
 
                         <label htmlFor="password">Passwod</label>
                         <Field 

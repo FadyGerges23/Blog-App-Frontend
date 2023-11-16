@@ -28,6 +28,10 @@ const ViewProfile = () => {
                         <br />
                         <span className="info-label">Username:</span>
                         <span className="info-value">{user.username}</span>
+                        <br />
+                        <br />
+                        <span className="info-label">Display Name:</span>
+                        <span className="info-value">{user.displayName}</span>
                     </div>
                     <button className="edit-button" onClick={handleEdit}>Edit</button>
                 </div>
