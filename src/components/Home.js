@@ -8,7 +8,7 @@ const Home = () => {
 
     useEffect(() => {
         if(!user) {
-            navigate('/sign_in');
+            navigate('/users/sign_in');
         }
     }, [user, navigate]);
 

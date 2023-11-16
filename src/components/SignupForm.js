@@ -44,7 +44,7 @@ const SignupForm = () => {
 
     useEffect(() => {
         if(user) {
-            navigate('/home');
+            navigate(`/users/${user.id}/home`);
         }
     }, [user, navigate]);
     
@@ -90,7 +90,7 @@ const SignupForm = () => {
                             } else {
                                 signUser(response.signUpUser.user)
                                 Cookies.set('user', JSON.stringify(response.signUpUser.user), { expires: 7 });
-                                navigate('/home');
+                                navigate(`/users/${response.signUpUser.user.id}/home`);
                             }
                         },
                         onError: (error) => {

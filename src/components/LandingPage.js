@@ -8,7 +8,7 @@ const LandingPage = () => {
 
     useEffect(() => {
         if(user) {
-            navigate('/home');
+            navigate(`/users/${user.id}/home`);
         }
     }, [user, navigate]);
 

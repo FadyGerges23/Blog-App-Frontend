@@ -40,7 +40,7 @@ const SignInForm = () => {
 
     useEffect(() => {
         if(user) {
-            navigate('/home');
+            navigate(`/users/${user.id}/home`);
         }
     }, [user, navigate]);
     
@@ -86,7 +86,7 @@ const SignInForm = () => {
                             } else {
                                 signUser(response.signInUser.user)
                                 Cookies.set('user', JSON.stringify(response.signInUser.user), { expires: 7 });
-                                navigate('/home');
+                                navigate(`/users/${response.signInUser.user.id}/home`);
                             }
                         },
                         onError: (error) => {

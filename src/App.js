@@ -19,11 +19,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={ <RootLayout /> }>
       <Route index element={ <LandingPage /> } />
-      <Route path="/home" element={ <Home /> } />
-      <Route path="/sign_up" element={ <SignupForm /> } />
-      <Route path="/sign_in" element={ <SignInForm /> } />
-      <Route path="/view_profile" element={ <ViewProfile /> } />
-      <Route path="/edit_profile" element={ <EditProfile /> } />
+      <Route path="/users/:id/home" element={ <Home /> } />
+      <Route path="/users/sign_up" element={ <SignupForm /> } />
+      <Route path="/users/sign_in" element={ <SignInForm /> } />
+      <Route path="/users/:id/profile" element={ <ViewProfile /> } />
+      <Route path="/users/:id/edit_profile" element={ <EditProfile /> } />
     </Route>
   )
 );

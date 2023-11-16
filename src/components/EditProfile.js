@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import EditProfileSchema from "../validation_schemas/EditProfileSchema";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { useMutation } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
@@ -28,6 +28,7 @@ const EditProfileMutation = graphql`
 
 const EditProfile = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const { user, signUser } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const initialValues = { 
@@ -55,7 +56,7 @@ const EditProfile = () => {
                 validationSchema={EditProfileSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     const token = user.token;
-                    const userData = { user: values }
+                    const userData = { user: {...values, id: id} }
                     // axios.put('http://localhost:3000/users', userData, {
                     //     headers: {
                     //         'Content-Type': 'application/json',
@@ -88,7 +89,7 @@ const EditProfile = () => {
                             } else {
                                 signUser({...response.editUser.user, token: token})
                                 Cookies.set('user', JSON.stringify({...response.editUser.user, token: token}), { expires: 7 });
-                                navigate('/view_profile');
+                                navigate(`/users/${user.id}/profile`);
                             }
                         },
                         onError: (error) => {

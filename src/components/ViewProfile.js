@@ -8,12 +8,12 @@ const ViewProfile = () => {
     
     useEffect(() => {
         if(!user) {
-            navigate('/sign_in');
+            navigate('/users/sign_in');
         }
     }, [user, navigate]);
 
     const handleEdit = () => {
-        navigate('/edit_profile')
+        navigate(`/users/${user.id}/edit_profile`)
     }
 
     return ( 
