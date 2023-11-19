@@ -7,26 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import Cookies from 'js-cookie';
 // import { graphql } from 'relay-runtime';
 import { useMutation } from 'react-relay';
-import graphql from 'babel-plugin-relay/macro';
-
-const SignupFormMutation = graphql`
-  mutation SignupFormMutation(
-    $input: SignUpUserInput!
-  ) {
-    signUpUser(
-        input: $input
-    ) {
-      user {
-        id
-        email
-        username
-        displayName
-        token
-      }
-      errors
-    }
-  }
-`;
+import SignupFormMutation from "../graphql/mutations/SignupFormMutation";
 
 
 const SignupForm = () => {

@@ -4,15 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Cookies from 'js-cookie';
 import { useMutation } from 'react-relay';
-import graphql from 'babel-plugin-relay/macro';
+import SignOutButtonMutation from "../graphql/mutations/SignOutButtonMutation";
 
-const SignOutButtonMutation = graphql`
-  mutation SignOutButtonMutation {
-    signOutUser(input: {}) {
-      isSignOutSuccessful
-    }
-  }
-`;
 
 const SignOutButton = () => {
     const navigate = useNavigate();

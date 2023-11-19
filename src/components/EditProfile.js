@@ -1,46 +1,41 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import EditProfileSchema from "../validation_schemas/EditProfileSchema";
 import { useNavigate, useParams } from "react-router-dom";
-import Cookies from 'js-cookie';
 import { useMutation } from 'react-relay';
-import graphql from 'babel-plugin-relay/macro';
+import { useLazyLoadQuery } from "react-relay";
+import CurrentUserQuery from "../graphql/queries/CurrentUserQuery";
+import EditProfileMutation from "../graphql/mutations/EditProfileMutation";
 // import axios from 'axios';
 
-const EditProfileMutation = graphql`
-  mutation EditProfileMutation(
-    $input: EditUserInput!
-  ) {
-    editUser(
-        input: $input
-    ) {
-      user {
-        id
-        email
-        username
-        displayName
-      }
-      errors
-    }
-  }
-`;
 
 const EditProfile = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { user, signUser } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
+    const { user } = useContext(UserContext)
+    const data = useLazyLoadQuery(CurrentUserQuery, {}, { fetchPolicy: 'network-only' });
+    const {email, username, displayName, error} = data.currentUser;
     const initialValues = { 
-        email: user ? user.email : "",
-        username: user ? user.username : "",
-        displayName: user ? user.displayName : "",
+        email: email,
+        username: username,
+        displayName: displayName,
         password: "",
         passwordConfirmation: "",
         currentPassword: ""
     };
     const [commitMutation, isMutationInFlight] = useMutation(EditProfileMutation);
     
+    useEffect(() => {
+        if(id !== user.id) {
+            navigate("/unauthorized")
+        }
+        if(error) {
+            navigate('/users/sign_in');
+        }
+    }, [id, user, error, navigate]);
+
     return ( 
         <div className="form">
             <h2>Edit Profile</h2>
@@ -55,7 +50,6 @@ const EditProfile = () => {
                 initialValues={initialValues}
                 validationSchema={EditProfileSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    const token = user.token;
                     const userData = { user: {...values, id: id} }
                     // axios.put('http://localhost:3000/users', userData, {
                     //     headers: {
@@ -87,8 +81,6 @@ const EditProfile = () => {
                             if(response.editUser.errors.length > 0) {
                                 setErrors(response.editUser.errors)
                             } else {
-                                signUser({...response.editUser.user, token: token})
-                                Cookies.set('user', JSON.stringify({...response.editUser.user, token: token}), { expires: 7 });
                                 navigate(`/users/${user.id}/profile`);
                             }
                         },
