@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -10,10 +10,12 @@ const {RelayEnvironmentProvider} = require('react-relay');
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RelayEnvironmentProvider environment={environment}>
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
-    </RelayEnvironmentProvider>
+    <Suspense fallback={<div>Loading...</div>}>
+      <RelayEnvironmentProvider environment={environment}>
+        <UserContextProvider>
+          <App />
+        </UserContextProvider>
+      </RelayEnvironmentProvider>
+    </Suspense>
   </React.StrictMode>
 );

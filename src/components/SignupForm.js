@@ -7,26 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import Cookies from 'js-cookie';
 // import { graphql } from 'relay-runtime';
 import { useMutation } from 'react-relay';
-import graphql from 'babel-plugin-relay/macro';
-
-const SignupFormMutation = graphql`
-  mutation SignupFormMutation(
-    $input: SignUpUserInput!
-  ) {
-    signUpUser(
-        input: $input
-    ) {
-      user {
-        id
-        email
-        username
-        displayName
-        token
-      }
-      errors
-    }
-  }
-`;
+import SignupFormMutation from "../graphql/mutations/SignupFormMutation";
 
 
 const SignupForm = () => {
@@ -44,7 +25,7 @@ const SignupForm = () => {
 
     useEffect(() => {
         if(user) {
-            navigate('/home');
+            navigate(`/users/${user.id}/home`);
         }
     }, [user, navigate]);
     
@@ -90,7 +71,7 @@ const SignupForm = () => {
                             } else {
                                 signUser(response.signUpUser.user)
                                 Cookies.set('user', JSON.stringify(response.signUpUser.user), { expires: 7 });
-                                navigate('/home');
+                                navigate(`/users/${response.signUpUser.user.id}/home`);
                             }
                         },
                         onError: (error) => {

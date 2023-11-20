@@ -11,10 +11,10 @@ const RootLayout = () => {
             <header>
                 <nav>
                     <h3>Blog App</h3>
-                    { !user && <NavLink to="/sign_up">Sign Up</NavLink> }
-                    { !user && <NavLink to="/sign_in">Sign In</NavLink> }
-                    { user && <NavLink to="/">Home</NavLink> }
-                    { user && <NavLink to="/view_profile">Profile</NavLink> }
+                    { !user && <NavLink to="/users/sign_up">Sign Up</NavLink> }
+                    { !user && <NavLink to="/users/sign_in">Sign In</NavLink> }
+                    { user && <NavLink to={`/users/${user.id}/home`}>Home</NavLink> }
+                    { user && <NavLink to={`/users/${user.id}/profile`}>Profile</NavLink> }
                     { user && <SignOutButton />}
                 </nav>
             </header>

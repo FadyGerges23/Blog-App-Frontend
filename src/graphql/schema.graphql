@@ -1,9 +1,6 @@
 type User {
   id: ID!
-  email: String!
-  username: String!
-  displayName: String
-  token: String!
+  token: String
 }
 
 input SignUpUserInput {
@@ -36,6 +33,7 @@ type SignOutUserPayload {
 }
 
 input EditUserInput {
+  id: ID!
   email: String!
   username: String!
   displayName: String!
@@ -45,8 +43,18 @@ input EditUserInput {
 }
 
 type EditUserPayload {
-  user: User!
   errors: [String!]
+}
+
+type CurrentUser {
+  email: String
+  username: String
+  displayName: String
+  error: String
+}
+
+type Query {
+  currentUser: CurrentUser!
 }
 
 type Mutation {

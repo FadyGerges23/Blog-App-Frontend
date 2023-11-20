@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3fee7f216030223d4cc5644abcea344d>>
+ * @generated SignedSource<<eed3a0ee9d1d47c70e9f37846724031f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,9 +26,9 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "SignUpUserPayload",
+    "concreteType": "SignInUserPayload",
     "kind": "LinkedField",
-    "name": "signUpUser",
+    "name": "signInUser",
     "plural": false,
     "selections": [
       {
@@ -44,27 +44,6 @@ v1 = [
             "args": null,
             "kind": "ScalarField",
             "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "email",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "displayName",
             "storageKey": null
           },
           {
@@ -93,7 +72,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "SignupFormMutation",
+    "name": "SignInFormMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -102,20 +81,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "SignupFormMutation",
+    "name": "SignInFormMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c5a4f49a77e9b1a772a7c42288c2ae04",
+    "cacheID": "fa708f7de9769f2902d66e3e9acd9e51",
     "id": null,
     "metadata": {},
-    "name": "SignupFormMutation",
+    "name": "SignInFormMutation",
     "operationKind": "mutation",
-    "text": "mutation SignupFormMutation(\n  $input: SignUpUserInput!\n) {\n  signUpUser(input: $input) {\n    user {\n      id\n      email\n      username\n      displayName\n      token\n    }\n    errors\n  }\n}\n"
+    "text": "mutation SignInFormMutation(\n  $input: SignInUserInput!\n) {\n  signInUser(input: $input) {\n    user {\n      id\n      token\n    }\n    errors\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "a120229004eaa95a9fdaf2e7ad110c68";
+node.hash = "eafa4deed14697630131857080d1cb61";
 
 module.exports = node;

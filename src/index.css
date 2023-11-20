@@ -162,3 +162,14 @@ ul {
 .edit-button:hover {
   background-color: #0056b3;
 }
+
+.unauthorized {
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: xx-large;
+  font-weight: bold; 
+  color: red;
+}
