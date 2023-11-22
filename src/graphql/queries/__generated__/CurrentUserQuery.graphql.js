@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6ebc9d27612617eba72db53918c921df>>
+ * @generated SignedSource<<8b84679df0876fc80935b6638586016a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -43,6 +43,45 @@ var v0 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
+        "name": "avatar",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Post",
+        "kind": "LinkedField",
+        "name": "posts",
+        "plural": true,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "title",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "body",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
         "name": "error",
         "storageKey": null
       }
@@ -68,16 +107,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "2338adc99418ac70f3a1ac1615319099",
+    "cacheID": "fcb0dc2c9d1e9b41ee61f7dcec771ff3",
     "id": null,
     "metadata": {},
     "name": "CurrentUserQuery",
     "operationKind": "query",
-    "text": "query CurrentUserQuery {\n  currentUser {\n    email\n    username\n    displayName\n    error\n  }\n}\n"
+    "text": "query CurrentUserQuery {\n  currentUser {\n    email\n    username\n    displayName\n    avatar\n    posts {\n      id\n      title\n      body\n    }\n    error\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "4b45a1276ecf5175549be4252fc06c14";
+node.hash = "822e08e8b121f0bf555db95c1291b0a5";
 
 module.exports = node;

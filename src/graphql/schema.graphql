@@ -46,15 +46,56 @@ type EditUserPayload {
   errors: [String!]
 }
 
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+}
+
 type CurrentUser {
   email: String
   username: String
   displayName: String
+  avatar: String
+  posts: [Post]
   error: String
+}
+
+input CreatePostInput {
+  userId: ID!
+  title: String!
+  body: String!
+}
+
+type CreatePostPayload {
+  post: Post
+  errors: [String]
+}
+
+input EditPostInput {
+  userId: ID!
+  postId: ID!
+  title: String!
+  body: String!
+}
+
+type EditPostPayload {
+  post: Post
+  errors: [String]
+}
+
+input DeletePostInput {
+  userId: ID!
+  postId: ID!
+}
+
+type DeletePostPayload {
+  isDeleteSuccessful: Boolean
 }
 
 type Query {
   currentUser: CurrentUser!
+  post(userId: ID!, postId: ID!): Post
 }
 
 type Mutation {
@@ -62,4 +103,7 @@ type Mutation {
   signInUser(input: SignInUserInput!): SignInUserPayload!
   signOutUser(input: SignOutUserInput!): SignOutUserPayload!
   editUser(input: EditUserInput!): EditUserPayload!
+  createPost(input: CreatePostInput!): CreatePostPayload!
+  editPost(input: EditPostInput!): EditPostPayload!
+  deletePost(input: DeletePostInput!): DeletePostPayload!
 }

@@ -3,11 +3,11 @@ import { UserContext } from "../contexts/UserContext";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import EditProfileSchema from "../validation_schemas/EditProfileSchema";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation } from 'react-relay';
 import { useLazyLoadQuery } from "react-relay";
 import CurrentUserQuery from "../graphql/queries/CurrentUserQuery";
-import EditProfileMutation from "../graphql/mutations/EditProfileMutation";
-// import axios from 'axios';
+import axios from 'axios';
+// import { useMutation } from 'react-relay';
+// import EditProfileMutation from "../graphql/mutations/EditProfileMutation";
 
 
 const EditProfile = () => {
@@ -15,8 +15,9 @@ const EditProfile = () => {
     const { id } = useParams();
     const [errors, setErrors] = useState([]);
     const { user } = useContext(UserContext)
+    const [file, setFile] = useState(null);
     const data = useLazyLoadQuery(CurrentUserQuery, {}, { fetchPolicy: 'network-only' });
-    const {email, username, displayName, error} = data.currentUser;
+    const {email, username, displayName, avatar, error} = data.currentUser;
     const initialValues = { 
         email: email,
         username: username,
@@ -25,7 +26,7 @@ const EditProfile = () => {
         passwordConfirmation: "",
         currentPassword: ""
     };
-    const [commitMutation, isMutationInFlight] = useMutation(EditProfileMutation);
+    // const [commitMutation, isMutationInFlight] = useMutation(EditProfileMutation);
     
     useEffect(() => {
         if(id !== user.id) {
@@ -35,6 +36,10 @@ const EditProfile = () => {
             navigate('/users/sign_in');
         }
     }, [id, user, error, navigate]);
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0])
+    }
 
     return ( 
         <div className="form">
@@ -50,45 +55,52 @@ const EditProfile = () => {
                 initialValues={initialValues}
                 validationSchema={EditProfileSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    const userData = { user: {...values, id: id} }
-                    // axios.put('http://localhost:3000/users', userData, {
-                    //     headers: {
-                    //         'Content-Type': 'application/json',
-                    //         Authorization: `Bearer ${token}`,
-                    //       },
-                    // })
-                    // .then(response => {
-                    //     console.log(response.data.user)
-                    //     if(response.status === 200) {
-                    //         signUser(response.data.user)
-                    //         Cookies.set('user', JSON.stringify(response.data.user), { expires: 7 });
-                    //         navigate('/view_profile');
-                    //     }
-                    //     else {
-                    //         console.log("Error occurred while trying to sign-in. Status code: ", response.status)
-                    //     }
-                    // })
-                    // .catch(error => {
-                    //     console.error('Error:', error.response.data.errors);
-                    //     setErrors(error.response.data.errors);
-                    // });
-
-                    commitMutation({
-                        variables: {
-                            input: userData
-                        },
-                        onCompleted: (response) => {
-                            if(response.editUser.errors.length > 0) {
-                                setErrors(response.editUser.errors)
-                            } else {
-                                navigate(`/users/${user.id}/profile`);
-                            }
-                        },
-                        onError: (error) => {
-                            console.log("Error:", error)
-                            setErrors(["Can't perform the sign-up operation"])
+                    const formData = new FormData();
+                    formData.append('user[email]', values.email);
+                    formData.append('user[username]', values.username);
+                    formData.append('user[display_name]', values.displayName);
+                    formData.append('user[password]', values.password);
+                    formData.append('user[password_confirmation]', values.passwordConfirmation);
+                    formData.append('user[current_password]', values.currentPassword);
+                    formData.append('user[avatar]', file);
+                    
+                    axios.put(`http://localhost:3000/users/${user.id}/edit`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${user.token}`,
+                          },
+                    })
+                    .then(response => {
+                        if(response.status === 200) {
+                            navigate(`/users/${response.data.user.id}/profile`);
+                        }
+                        else {
+                            console.log("Error occurred while trying to sign-in. Status code: ", response.status)
                         }
                     })
+                    .catch(error => {
+                        console.error('Error:', error.response.data.errors);
+                        setErrors(error.response.data.errors);
+                    });
+
+                    // const userData = { user: {...values, id: id} }
+
+                    // commitMutation({
+                    //     variables: {
+                    //         input: userData
+                    //     },
+                    //     onCompleted: (response) => {
+                    //         if(response.editUser.errors.length > 0) {
+                    //             setErrors(response.editUser.errors)
+                    //         } else {
+                    //             navigate(`/users/${user.id}/profile`);
+                    //         }
+                    //     },
+                    //     onError: (error) => {
+                    //         console.log("Error:", error)
+                    //         setErrors(["Can't perform the sign-up operation"])
+                    //     }
+                    // })
 
                     setSubmitting(false)
                 }}
@@ -148,8 +160,18 @@ const EditProfile = () => {
                             placeholder="current password"  
                         />
                         <ErrorMessage name="currentPassword" component="p" className="error"></ErrorMessage>
-                    
-                        <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
+
+                        <label htmlFor="avatar">Avatar</label>
+                        <img src={avatar ? avatar : "/assets/default-avatar.png"} alt="avatar" className="avatar" />
+                        <input 
+                            type="file" 
+                            id="avatar" 
+                            name="avatar"
+                            onChange={handleFileChange}
+                            accept="image/*"
+                        />
+
+                        <button type="submit" disabled={isSubmitting}>Submit</button>
                         
                     </Form>
                 )}

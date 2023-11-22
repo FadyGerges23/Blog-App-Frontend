@@ -10,8 +10,7 @@ const ViewProfile = () => {
     const { id } = useParams();
     const { user } = useContext(UserContext)
     const data = useLazyLoadQuery(CurrentUserQuery, {}, { fetchPolicy: 'network-only' });
-    const {email, username, displayName, error} = data.currentUser;
-    
+    const {email, username, displayName, avatar, error} = data.currentUser;
     
     useEffect(() => {
         if(id !== user.id) {
@@ -31,6 +30,9 @@ const ViewProfile = () => {
             <div className="profile content">
                 <h2 className="heading">User Profile</h2>
                 <div className="user-info">
+                    <span><img src={avatar ? avatar : "/assets/default-avatar.png"} alt="avatar" className="avatar" /></span>
+                    <br />
+                    <br />
                     <span className="info-label">Email:</span>
                     <span className="info-value">{email}</span>
                     <br />
@@ -42,7 +44,7 @@ const ViewProfile = () => {
                     <span className="info-label">Display Name:</span>
                     <span className="info-value">{displayName}</span>
                 </div>
-                <button className="edit-button" onClick={handleEdit}>Edit</button>
+                <button className="custom-button" onClick={handleEdit}>Edit</button>
             </div>
         </div>
      );

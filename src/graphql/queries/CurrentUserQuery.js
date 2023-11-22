@@ -6,6 +6,12 @@ const CurrentUserQuery = graphql`
             email
             username
             displayName
+            avatar
+            posts {
+                id
+                title
+                body
+            }
             error
         }
     }

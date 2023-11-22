@@ -15,6 +15,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./contexts/UserContext";
 import Cookies from 'js-cookie';
 import Unauthorized from "./components/Unauthorized";
+import CreatePost from "./components/CreatePost";
+import EditPost from "./components/EditPost";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +27,8 @@ const router = createBrowserRouter(
       <Route path="/users/sign_in" element={ <SignInForm /> } />
       <Route path="/users/:id/profile" element={ <ViewProfile /> } />
       <Route path="/users/:id/edit_profile" element={ <EditProfile /> } />
+      <Route path="/users/:id/create_post" element={ <CreatePost /> } />
+      <Route path="/users/:user_id/posts/:id/edit" element={ <EditPost /> } />
       <Route path="/unauthorized" element={ <Unauthorized /> } />
     </Route>
   )
