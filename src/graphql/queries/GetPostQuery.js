@@ -6,6 +6,10 @@ const GetPostQuery = graphql`
           id
           title
           body
+          category {
+            id
+            name
+          }
         }
     }
 `

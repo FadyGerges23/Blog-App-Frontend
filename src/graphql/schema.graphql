@@ -46,10 +46,16 @@ type EditUserPayload {
   errors: [String!]
 }
 
+type Category {
+  id: ID!
+  name: String!
+}
+
 type Post {
   id: ID!
   title: String!
   body: String!
+  category: Category!
 }
 
 type CurrentUser {
@@ -57,7 +63,6 @@ type CurrentUser {
   username: String
   displayName: String
   avatar: String
-  posts: [Post]
   error: String
 }
 
@@ -65,6 +70,7 @@ input CreatePostInput {
   userId: ID!
   title: String!
   body: String!
+  categoryId: ID!
 }
 
 type CreatePostPayload {
@@ -77,6 +83,7 @@ input EditPostInput {
   postId: ID!
   title: String!
   body: String!
+  categoryId: ID!
 }
 
 type EditPostPayload {
@@ -96,6 +103,8 @@ type DeletePostPayload {
 type Query {
   currentUser: CurrentUser!
   post(userId: ID!, postId: ID!): Post
+  posts(userId: ID!): [Post]
+  categories: [Category]
 }
 
 type Mutation {

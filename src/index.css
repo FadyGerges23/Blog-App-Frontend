@@ -65,6 +65,10 @@ header a.active {
   transform: translate(-50%, -50%);
 }
 
+.edit-form {
+  margin-top: 60px;
+}
+
 /* Style for labels */
 label {
   display: block;
@@ -194,9 +198,19 @@ ul {
   border-radius: 8px;
 }
 
+.post-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .post-title {
   font-size: 1.5rem;
   margin-bottom: 10px;
+}
+
+.post-category {
+  font-size: 1.2rem;
+  color: #555;
 }
 
 .post-body {
@@ -207,4 +221,9 @@ ul {
 .post > button {
   left: 0;
   margin-right: 10px;
+}
+
+.select {
+  margin-top: 4px;
+  margin-bottom: 20px;
 }

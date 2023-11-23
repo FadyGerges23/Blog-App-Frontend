@@ -7,11 +7,6 @@ const CurrentUserQuery = graphql`
             username
             displayName
             avatar
-            posts {
-                id
-                title
-                body
-            }
             error
         }
     }

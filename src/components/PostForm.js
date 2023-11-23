@@ -1,7 +1,29 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import PostFormSchema from "../validation_schemas/PostFormSchema";
+import Select from 'react-select'
+import { usePreloadedQuery } from "react-relay";
+import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
+import { useEffect, useState } from "react";
 
-const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubmit }) => {
+
+const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubmit, queryRef }) => {
+    const { categories } = usePreloadedQuery(
+        GetCategoriesQuery,
+        queryRef,
+      );
+      const [options, setOptions] = useState([]);
+
+    useEffect(() => {
+        setOptions(
+            categories.map(category => {
+                return {
+                    label: category.name,
+                    value: category.id
+                }
+            })
+        );
+    }, [categories]);
+
     return ( 
         <div className="form">
             <h2>{ title }</h2>
@@ -16,11 +38,12 @@ const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubm
                 initialValues={initialValues}
                 validationSchema={PostFormSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    handleSubmit(values)
+                    const { category, ...params} = values;
+                    handleSubmit(params)
                     setSubmitting(false)
                 }}
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, setFieldValue }) => (
                     <Form>
                         <label htmlFor="title">Title</label>
                         <Field 
@@ -39,6 +62,18 @@ const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubm
                             placeholder="body"    
                         />
                         <ErrorMessage name="body" component="p" className="error"></ErrorMessage>
+
+                        <label htmlFor="category">Category</label>
+                        <Field 
+                            as={Select} 
+                            id="category" 
+                            name="category"
+                            placeholder="select"
+                            className="select"
+                            options={options}
+                            onChange={option => {setFieldValue('category', option); setFieldValue('categoryId', option.value)}} 
+                        />
+                        <ErrorMessage name="category" component="p" className="error"></ErrorMessage>
 
                         <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
                     </Form>

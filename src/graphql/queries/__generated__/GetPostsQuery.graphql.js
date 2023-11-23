@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<af35c6da6c9ad304cc8c0035dca635ac>>
+ * @generated SignedSource<<a52a06d9ece3e7bbd45be7c04d1f9020>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,32 +9,24 @@
 'use strict';
 
 var node = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "postId"
-},
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "userId"
+  }
+],
 v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "userId"
-},
-v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = [
+v2 = [
   {
     "alias": null,
     "args": [
-      {
-        "kind": "Variable",
-        "name": "postId",
-        "variableName": "postId"
-      },
       {
         "kind": "Variable",
         "name": "userId",
@@ -43,10 +35,10 @@ v3 = [
     ],
     "concreteType": "Post",
     "kind": "LinkedField",
-    "name": "post",
-    "plural": false,
+    "name": "posts",
+    "plural": true,
     "selections": [
-      (v2/*: any*/),
+      (v1/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -69,7 +61,7 @@ v3 = [
         "name": "category",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v1/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -86,38 +78,32 @@ v3 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "GetPostQuery",
-    "selections": (v3/*: any*/),
+    "name": "GetPostsQuery",
+    "selections": (v2/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "GetPostQuery",
-    "selections": (v3/*: any*/)
+    "name": "GetPostsQuery",
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "d643b0dd39124b5df4790e2bc91003dd",
+    "cacheID": "7204ef8737596de449757981b8fcb904",
     "id": null,
     "metadata": {},
-    "name": "GetPostQuery",
+    "name": "GetPostsQuery",
     "operationKind": "query",
-    "text": "query GetPostQuery(\n  $userId: ID!\n  $postId: ID!\n) {\n  post(userId: $userId, postId: $postId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "query GetPostsQuery(\n  $userId: ID!\n) {\n  posts(userId: $userId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "c2a7867a66d44a5660c3d2130bd7cfc2";
+node.hash = "e54442e39ff70d317aa6ee1fee0b5ee1";
 
 module.exports = node;

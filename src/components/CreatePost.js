@@ -2,9 +2,10 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { useMutation } from 'react-relay';
+import { useMutation, useQueryLoader } from 'react-relay';
 import CreatePostMutation from "../graphql/mutations/CreatePostMutation";
 import PostForm from "./PostForm";
+import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
 
 
 const CreatePost = () => {
@@ -12,16 +13,22 @@ const CreatePost = () => {
     const [commitMutation, isMutationInFlight] = useMutation(CreatePostMutation);
     const { user } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
+    const [
+        getCategoriesQueryRef,
+        loadGetCategoriesQuery,
+      ] = useQueryLoader(GetCategoriesQuery);
     const initialValues = {
         title: "",
-        body: ""
+        body: "",
+        category: null
     }
 
     useEffect(() => {
         if(!user) {
             navigate(`/users/sign_in`);
         }
-    }, [user, navigate]);
+        loadGetCategoriesQuery();
+    }, [user, navigate, loadGetCategoriesQuery]);
 
     const handleSubmit = (values) => {
 
@@ -60,7 +67,19 @@ const CreatePost = () => {
     }
     
     return (
-        <PostForm title="Create Post" initialValues={initialValues} errors={errors} isMutationInFlight={isMutationInFlight} handleSubmit={handleSubmit} />
+        <div>
+            {
+                getCategoriesQueryRef && 
+                    <PostForm 
+                        title="Create Post" 
+                        initialValues={initialValues} 
+                        errors={errors} 
+                        isMutationInFlight={isMutationInFlight} 
+                        handleSubmit={handleSubmit} 
+                        queryRef={getCategoriesQueryRef}
+                    />
+            }
+        </div>
      );
 }
  

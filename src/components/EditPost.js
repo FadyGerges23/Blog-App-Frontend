@@ -2,10 +2,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { useLazyLoadQuery, useMutation } from 'react-relay';
+import { useLazyLoadQuery, useMutation, useQueryLoader } from 'react-relay';
 import EditPostMutation from "../graphql/mutations/EditPostMutation";
 import PostForm from "./PostForm";
 import GetPostQuery from "../graphql/queries/GetPostQuery";
+import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
 
 
 const EditPost = () => {
@@ -14,18 +15,25 @@ const EditPost = () => {
     const { user } = useContext(UserContext);
     const [commitMutation, isMutationInFlight] = useMutation(EditPostMutation);
     const data = useLazyLoadQuery(GetPostQuery, {userId: user.id, postId: postId}, { fetchPolicy: 'network-only' });
-    const {title, body} = data.post;
+    const {title, body, category} = data.post;
     const [errors, setErrors] = useState([]);
+    const [
+        getCategoriesQueryRef,
+        loadGetCategoriesQuery,
+      ] = useQueryLoader(GetCategoriesQuery);
     const initialValues = {
         title: title,
-        body: body
+        body: body,
+        category: { label: category.name, value: category.id },
+        categoryId: category.id
     }
 
     useEffect(() => {
         if(!user) {
             navigate(`/users/sign_in`);
         }
-    }, [user, navigate]);
+        loadGetCategoriesQuery();
+    }, [user, navigate, loadGetCategoriesQuery]);
 
     const handleSubmit = (values) => {
 
@@ -64,7 +72,19 @@ const EditPost = () => {
     }
     
     return (
-        <PostForm title="Edit Post" initialValues={initialValues} isMutationInFlight={isMutationInFlight} errors={errors} handleSubmit={handleSubmit} />
+        <div>
+            {
+                getCategoriesQueryRef &&
+                    <PostForm 
+                        title="Edit Post" 
+                        initialValues={initialValues} 
+                        isMutationInFlight={isMutationInFlight} 
+                        errors={errors} 
+                        handleSubmit={handleSubmit} 
+                        queryRef={getCategoriesQueryRef}
+                    />
+            }
+        </div>
      );
 }
  

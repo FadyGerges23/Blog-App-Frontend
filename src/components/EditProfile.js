@@ -42,7 +42,7 @@ const EditProfile = () => {
     }
 
     return ( 
-        <div className="form">
+        <div className="form edit-form">
             <h2>Edit Profile</h2>
             <ul>
                 {errors.map((error, index) => {
