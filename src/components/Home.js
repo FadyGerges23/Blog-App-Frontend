@@ -40,6 +40,16 @@ const Home = () => {
                                             <p className="post-category">{ post.category.name }</p>
                                         </div>
                                         <p className="post-body">{ post.body }</p>
+                                        { post.tags.map(tag => {
+                                            return (
+                                                <div key={tag.tagId} className="tags-list">
+                                                    <div className="tag">#{tag.name}</div>
+                                                </div>     
+                                            )
+                                        }) 
+                                        }
+                                        <br />
+                                        <br />
                                         <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`, { state: post })}>Edit</button>
                                         <DeletePostButton postId={post.id} currentPosts={currentPosts} setCurrentPosts={setCurrentPosts} />
                                     </div>

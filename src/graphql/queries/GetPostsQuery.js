@@ -10,6 +10,10 @@ const GetPostsQuery = graphql`
                 id
                 name
             }
+            tags {
+                tagId
+                name
+            }
         }
     }
 `

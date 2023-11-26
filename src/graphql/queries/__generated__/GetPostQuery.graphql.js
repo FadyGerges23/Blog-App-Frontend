@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<af35c6da6c9ad304cc8c0035dca635ac>>
+ * @generated SignedSource<<e53a6144b333651abdd6ad123163fcda>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,7 +26,14 @@ v2 = {
   "name": "id",
   "storageKey": null
 },
-v3 = [
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v4 = [
   {
     "alias": null,
     "args": [
@@ -70,13 +77,26 @@ v3 = [
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/)
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Tag",
+        "kind": "LinkedField",
+        "name": "tags",
+        "plural": true,
+        "selections": [
           {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "name",
+            "name": "tagId",
             "storageKey": null
-          }
+          },
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -93,7 +113,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "GetPostQuery",
-    "selections": (v3/*: any*/),
+    "selections": (v4/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -105,19 +125,19 @@ return {
     ],
     "kind": "Operation",
     "name": "GetPostQuery",
-    "selections": (v3/*: any*/)
+    "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "d643b0dd39124b5df4790e2bc91003dd",
+    "cacheID": "a6104e6dfb59885b58702dc1371e34ce",
     "id": null,
     "metadata": {},
     "name": "GetPostQuery",
     "operationKind": "query",
-    "text": "query GetPostQuery(\n  $userId: ID!\n  $postId: ID!\n) {\n  post(userId: $userId, postId: $postId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "query GetPostQuery(\n  $userId: ID!\n  $postId: ID!\n) {\n  post(userId: $userId, postId: $postId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n    tags {\n      tagId\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "c2a7867a66d44a5660c3d2130bd7cfc2";
+node.hash = "281fb723355ad33a7916b17c1ddc8690";
 
 module.exports = node;

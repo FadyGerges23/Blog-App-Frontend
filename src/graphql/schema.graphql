@@ -51,11 +51,17 @@ type Category {
   name: String!
 }
 
+type Tag {
+  tagId: ID!
+  name: String!
+}
+
 type Post {
   id: ID!
   title: String!
   body: String!
   category: Category!
+  tags: [Tag]
 }
 
 type CurrentUser {
@@ -71,6 +77,7 @@ input CreatePostInput {
   title: String!
   body: String!
   categoryId: ID!
+  tagsIds: [ID!]
 }
 
 type CreatePostPayload {
@@ -84,6 +91,7 @@ input EditPostInput {
   title: String!
   body: String!
   categoryId: ID!
+  tagsIds: [ID!]
 }
 
 type EditPostPayload {
@@ -100,11 +108,21 @@ type DeletePostPayload {
   isDeleteSuccessful: Boolean
 }
 
+input CreateTagInput {
+  name: String!
+}
+
+type CreateTagPayload {
+  tag: Tag
+  errors: [String]
+}
+
 type Query {
   currentUser: CurrentUser!
   post(userId: ID!, postId: ID!): Post
   posts(userId: ID!): [Post]
   categories: [Category]
+  tags: [Tag]
 }
 
 type Mutation {
@@ -115,4 +133,5 @@ type Mutation {
   createPost(input: CreatePostInput!): CreatePostPayload!
   editPost(input: EditPostInput!): EditPostPayload!
   deletePost(input: DeletePostInput!): DeletePostPayload!
+  createTag(input: CreateTagInput!): CreateTagPayload!
 }

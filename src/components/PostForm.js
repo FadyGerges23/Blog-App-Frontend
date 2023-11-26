@@ -1,20 +1,36 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import PostFormSchema from "../validation_schemas/PostFormSchema";
 import Select from 'react-select'
-import { usePreloadedQuery } from "react-relay";
+import CreatableSelect from 'react-select/creatable'
+import { useMutation, usePreloadedQuery } from "react-relay";
 import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
 import { useEffect, useState } from "react";
+import GetTagsQuery from "../graphql/queries/GetTagsQuery";
+import CreateTagMutation from "../graphql/mutations/CreateTagMutation";
 
 
-const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubmit, queryRef }) => {
+const PostForm = ({ title, initialValues, isMutationInFlightCategories, errors, handleSubmit, categoriesQueryRef, tagsQueryRef }) => {
     const { categories } = usePreloadedQuery(
         GetCategoriesQuery,
-        queryRef,
+        categoriesQueryRef,
       );
-      const [options, setOptions] = useState([]);
+
+      const { tags } = usePreloadedQuery(
+        GetTagsQuery,
+        tagsQueryRef,
+      );
+
+      const [commitMutation, isMutationInFlight] = useMutation(CreateTagMutation);
+
+      const [categoriesOptions, setCategoriesOptions] = useState([]);
+      const [tagsOptions, setTagsOptions] = useState([]);
+
+      const [selectedTagsOptions, setSelectedTagsOptions] = useState(initialValues.tags ? initialValues.tags : []);
+      const [tagErrors, setTagErrors] = useState([]);
+
 
     useEffect(() => {
-        setOptions(
+        setCategoriesOptions(
             categories.map(category => {
                 return {
                     label: category.name,
@@ -22,7 +38,46 @@ const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubm
                 }
             })
         );
-    }, [categories]);
+
+        setTagsOptions(
+            tags.map(tag => {
+                return {
+                    label: tag.name,
+                    value: tag.tagId
+                }
+            })
+        );
+    }, [categories, tags]);
+
+    const handleSelectTagChange = (selectedValues) => {
+        setSelectedTagsOptions(selectedValues);
+      };
+    
+    const handleCreateTagOption = (tagName) => {
+        const tagData = { tag: { name: tagName } };
+
+        commitMutation({
+            variables: {
+                input: tagData
+            },
+            onCompleted: (response) => {
+                if(response.createTag.errors.length > 0) {
+                    setTagErrors(response.createTag.errors)
+                } else {
+                    const createdTag = {
+                        label: response.createTag.tag.name,
+                        value: response.createTag.tag.tagId
+                    }
+                    setSelectedTagsOptions((prevOptions) => [...prevOptions, createdTag]);
+                    setTagsOptions((prevOptions) => [...prevOptions, createdTag]);
+                }
+            },
+            onError: (error) => {
+                console.log("Error:", error)
+                setTagErrors(["Can't create post!"])
+            }
+        })
+    };
 
     return ( 
         <div className="form">
@@ -34,12 +89,20 @@ const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubm
                     );
                 })}
             </ul>
+            <ul>
+                {tagErrors.map((error, index) => {
+                    return (
+                        <li key={index} className="error">{ error }</li>
+                    );
+                })}
+            </ul>
             <Formik
                 initialValues={initialValues}
                 validationSchema={PostFormSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    const { category, ...params} = values;
-                    handleSubmit(params)
+                    const { category, tags, ...params} = values;
+                    const tagsIds = selectedTagsOptions.map(selectedTag => selectedTag.value);
+                    handleSubmit({...params, tagsIds})
                     setSubmitting(false)
                 }}
             >
@@ -70,12 +133,27 @@ const PostForm = ({ title, initialValues, isMutationInFlight, errors, handleSubm
                             name="category"
                             placeholder="select"
                             className="select"
-                            options={options}
+                            options={categoriesOptions}
                             onChange={option => {setFieldValue('category', option); setFieldValue('categoryId', option.value)}} 
                         />
                         <ErrorMessage name="category" component="p" className="error"></ErrorMessage>
 
-                        <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
+                        <label htmlFor="tag">Tag</label>
+                        <Field 
+                            as={CreatableSelect} 
+                            id="tags" 
+                            name="tags"
+                            placeholder="select"
+                            className="select"
+                            options={tagsOptions}
+                            isMulti
+                            value={selectedTagsOptions}
+                            onChange={handleSelectTagChange}
+                            onCreateOption={handleCreateTagOption}
+                        />
+                        <ErrorMessage name="tags" component="p" className="error"></ErrorMessage>
+
+                        <button type="submit" disabled={isSubmitting && isMutationInFlightCategories && isMutationInFlight}>Submit</button>
                     </Form>
                 )}
 

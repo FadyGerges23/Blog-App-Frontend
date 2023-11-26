@@ -6,6 +6,7 @@ import { useMutation, useQueryLoader } from 'react-relay';
 import CreatePostMutation from "../graphql/mutations/CreatePostMutation";
 import PostForm from "./PostForm";
 import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
+import GetTagsQuery from "../graphql/queries/GetTagsQuery";
 
 
 const CreatePost = () => {
@@ -13,14 +14,22 @@ const CreatePost = () => {
     const [commitMutation, isMutationInFlight] = useMutation(CreatePostMutation);
     const { user } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
+    
     const [
         getCategoriesQueryRef,
         loadGetCategoriesQuery,
       ] = useQueryLoader(GetCategoriesQuery);
-    const initialValues = {
+
+    const [
+        getTagsQueryRef,
+        loadGetTagsQuery,
+      ] = useQueryLoader(GetTagsQuery);
+    
+      const initialValues = {
         title: "",
         body: "",
-        category: null
+        category: null,
+        tags: null
     }
 
     useEffect(() => {
@@ -28,7 +37,8 @@ const CreatePost = () => {
             navigate(`/users/sign_in`);
         }
         loadGetCategoriesQuery();
-    }, [user, navigate, loadGetCategoriesQuery]);
+        loadGetTagsQuery();
+    }, [user, navigate, loadGetCategoriesQuery, loadGetTagsQuery]);
 
     const handleSubmit = (values) => {
 
@@ -69,14 +79,15 @@ const CreatePost = () => {
     return (
         <div>
             {
-                getCategoriesQueryRef && 
+                getCategoriesQueryRef && getTagsQueryRef &&
                     <PostForm 
                         title="Create Post" 
                         initialValues={initialValues} 
                         errors={errors} 
-                        isMutationInFlight={isMutationInFlight} 
+                        isMutationInFlightCategories={isMutationInFlight} 
                         handleSubmit={handleSubmit} 
-                        queryRef={getCategoriesQueryRef}
+                        categoriesQueryRef={getCategoriesQueryRef}
+                        tagsQueryRef={getTagsQueryRef}
                     />
             }
         </div>
