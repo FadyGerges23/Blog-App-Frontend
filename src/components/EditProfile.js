@@ -3,10 +3,9 @@ import { UserContext } from "../contexts/UserContext";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import EditProfileSchema from "../validation_schemas/EditProfileSchema";
 import { useNavigate, useParams } from "react-router-dom";
-import { useLazyLoadQuery } from "react-relay";
-import CurrentUserQuery from "../graphql/queries/CurrentUserQuery";
 import axios from 'axios';
 import baseUrl from "../constants/baseUrl";
+import Cookies from 'js-cookie';
 // import { useMutation } from 'react-relay';
 // import EditProfileMutation from "../graphql/mutations/EditProfileMutation";
 
@@ -17,8 +16,7 @@ const EditProfile = () => {
     const [errors, setErrors] = useState([]);
     const { user } = useContext(UserContext)
     const [file, setFile] = useState(null);
-    const data = useLazyLoadQuery(CurrentUserQuery, {}, { fetchPolicy: 'network-only' });
-    const {email, username, displayName, avatar, error} = data.currentUser;
+    const {email, username, displayName, avatar, error} = user;
     const initialValues = { 
         email: email,
         username: username,
@@ -63,12 +61,17 @@ const EditProfile = () => {
                     formData.append('user[password]', values.password);
                     formData.append('user[password_confirmation]', values.passwordConfirmation);
                     formData.append('user[current_password]', values.currentPassword);
-                    formData.append('user[avatar]', file);
+                    
+                    if(file) {
+                        formData.append('user[avatar]', file);
+                    }
+
+                    const userCookie = Cookies.get('user');
                     
                     axios.put(`http://localhost:3000/users/${user.id}/edit`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${user.token}`,
+                            Authorization: `Bearer ${JSON.parse(userCookie).token}`,
                           },
                     })
                     .then(response => {

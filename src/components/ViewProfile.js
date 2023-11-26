@@ -9,7 +9,7 @@ import baseUrl from "../constants/baseUrl";
 const ViewProfile = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { user } = useContext(UserContext)
+    const { user, signUser } = useContext(UserContext)
     const data = useLazyLoadQuery(CurrentUserQuery, {}, { fetchPolicy: 'network-only' });
     const {email, username, displayName, avatar, error} = data.currentUser;
     
@@ -20,7 +20,8 @@ const ViewProfile = () => {
         if(error) {
             navigate('/users/sign_in');
         }
-    }, [id, user, error, navigate]);
+        signUser(data.currentUser)
+    }, [id, user, error, navigate, signUser, data]);
 
     const handleEdit = () => {
         navigate(`/users/${user.id}/edit_profile`)

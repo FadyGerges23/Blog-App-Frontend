@@ -1,6 +1,11 @@
 type User {
-  id: ID!
+  id: ID
+  email: String
+  username: String
+  displayName: String
+  avatar: String
   token: String
+  error: String
 }
 
 input SignUpUserInput {
@@ -64,14 +69,6 @@ type Post {
   tags: [Tag]
 }
 
-type CurrentUser {
-  email: String
-  username: String
-  displayName: String
-  avatar: String
-  error: String
-}
-
 input CreatePostInput {
   userId: ID!
   title: String!
@@ -118,7 +115,7 @@ type CreateTagPayload {
 }
 
 type Query {
-  currentUser: CurrentUser!
+  currentUser: User!
   post(userId: ID!, postId: ID!): Post
   posts(userId: ID!): [Post]
   categories: [Category]
