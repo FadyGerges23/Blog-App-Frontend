@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useLazyLoadQuery } from "react-relay";
 import CurrentUserQuery from "../graphql/queries/CurrentUserQuery";
 import axios from 'axios';
+import baseUrl from "../constants/baseUrl";
 // import { useMutation } from 'react-relay';
 // import EditProfileMutation from "../graphql/mutations/EditProfileMutation";
 
@@ -162,7 +163,7 @@ const EditProfile = () => {
                         <ErrorMessage name="currentPassword" component="p" className="error"></ErrorMessage>
 
                         <label htmlFor="avatar">Avatar</label>
-                        <img src={avatar ? avatar : "/assets/default-avatar.png"} alt="avatar" className="avatar" />
+                        <img src={avatar ? (baseUrl + avatar) : "/assets/default-avatar.png"} alt="avatar" className="avatar" />
                         <input 
                             type="file" 
                             id="avatar" 

@@ -3,6 +3,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLazyLoadQuery } from "react-relay";
 import CurrentUserQuery from "../graphql/queries/CurrentUserQuery";
+import baseUrl from "../constants/baseUrl";
 
 
 const ViewProfile = () => {
@@ -30,7 +31,7 @@ const ViewProfile = () => {
             <div className="profile content">
                 <h2 className="heading">User Profile</h2>
                 <div className="user-info">
-                    <span><img src={avatar ? avatar : "/assets/default-avatar.png"} alt="avatar" className="avatar" /></span>
+                    <span><img src={avatar ? (baseUrl + avatar) : "/assets/default-avatar.png"} alt="avatar" className="avatar" /></span>
                     <br />
                     <br />
                     <span className="info-label">Email:</span>
