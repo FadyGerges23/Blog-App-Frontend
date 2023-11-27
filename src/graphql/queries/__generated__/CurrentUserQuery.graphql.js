@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6ebc9d27612617eba72db53918c921df>>
+ * @generated SignedSource<<44620ea1ebe5b27de4cf1d85c51f2c2e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,11 +13,18 @@ var v0 = [
   {
     "alias": null,
     "args": null,
-    "concreteType": "CurrentUser",
+    "concreteType": "User",
     "kind": "LinkedField",
     "name": "currentUser",
     "plural": false,
     "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -37,6 +44,13 @@ var v0 = [
         "args": null,
         "kind": "ScalarField",
         "name": "displayName",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "avatar",
         "storageKey": null
       },
       {
@@ -68,16 +82,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "2338adc99418ac70f3a1ac1615319099",
+    "cacheID": "4e6f9732c9c79a6e8a24f7b852c4f910",
     "id": null,
     "metadata": {},
     "name": "CurrentUserQuery",
     "operationKind": "query",
-    "text": "query CurrentUserQuery {\n  currentUser {\n    email\n    username\n    displayName\n    error\n  }\n}\n"
+    "text": "query CurrentUserQuery {\n  currentUser {\n    id\n    email\n    username\n    displayName\n    avatar\n    error\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "4b45a1276ecf5175549be4252fc06c14";
+node.hash = "990d61f98f23dd200e5f6476b55f2a29";
 
 module.exports = node;

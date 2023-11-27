@@ -129,7 +129,7 @@ const SignupForm = () => {
                             placeholder="confirm-password"  
                         />
                         <ErrorMessage name="passwordConfirmation" component="p" className="error"></ErrorMessage>
-                    
+
                         <button type="submit" disabled={isSubmitting && isMutationInFlight}>Submit</button>
                         
                     </Form>

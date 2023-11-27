@@ -15,6 +15,10 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./contexts/UserContext";
 import Cookies from 'js-cookie';
 import Unauthorized from "./components/Unauthorized";
+import CreatePost from "./components/CreatePost";
+import EditPost from "./components/EditPost";
+import { useLazyLoadQuery } from "react-relay";
+import CurrentUserQuery from "./graphql/queries/CurrentUserQuery";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +29,8 @@ const router = createBrowserRouter(
       <Route path="/users/sign_in" element={ <SignInForm /> } />
       <Route path="/users/:id/profile" element={ <ViewProfile /> } />
       <Route path="/users/:id/edit_profile" element={ <EditProfile /> } />
+      <Route path="/users/:id/create_post" element={ <CreatePost /> } />
+      <Route path="/users/:user_id/posts/:id/edit" element={ <EditPost /> } />
       <Route path="/unauthorized" element={ <Unauthorized /> } />
     </Route>
   )
@@ -32,14 +38,15 @@ const router = createBrowserRouter(
 
 function App() {
   const { signUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+  const data = useLazyLoadQuery(CurrentUserQuery, {}, { fetchPolicy: 'network-only' });
 
   useEffect(() => {
     
     const userCookie = Cookies.get('user');
-    if(userCookie) {
+    if(userCookie && !data.currentUser.error) {
         try {
-            signUser(JSON.parse(userCookie));
+            signUser(data.currentUser);
         }
         catch(error) {
             console.error('Error parsing user data from the cookie:', error);

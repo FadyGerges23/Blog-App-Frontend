@@ -65,6 +65,10 @@ header a.active {
   transform: translate(-50%, -50%);
 }
 
+.edit-form {
+  margin-top: 60px;
+}
+
 /* Style for labels */
 label {
   display: block;
@@ -146,7 +150,7 @@ ul {
   color: #555;
 }
 
-.edit-button {
+.custom-button {
   background-color: #007bff;
   color: #fff;
   padding: 10px 20px;
@@ -157,9 +161,10 @@ ul {
   left: 45%;
   font-weight: bold;
   transition: background-color 0.3s;
+  margin-bottom: 20px;
 }
 
-.edit-button:hover {
+.custom-button:hover {
   background-color: #0056b3;
 }
 
@@ -172,4 +177,73 @@ ul {
   font-size: xx-large;
   font-weight: bold; 
   color: red;
+}
+
+.avatar {
+  width: 20%;
+}
+
+.post-list {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.post-category {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.post-body {
+  font-size: 1rem;
+  color: #555;
+}
+
+.post > button {
+  left: 0;
+  margin-right: 10px;
+}
+
+.select {
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+
+.tags-list {
+  display: inline-block;
+  margin: 8px;
+  margin-left: 0;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 8px;
+}
+
+.tag {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.tag:hover {
+  color: #555;
 }

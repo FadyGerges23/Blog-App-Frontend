@@ -1,6 +1,11 @@
 type User {
-  id: ID!
+  id: ID
+  email: String
+  username: String
+  displayName: String
+  avatar: String
   token: String
+  error: String
 }
 
 input SignUpUserInput {
@@ -46,15 +51,75 @@ type EditUserPayload {
   errors: [String!]
 }
 
-type CurrentUser {
-  email: String
-  username: String
-  displayName: String
-  error: String
+type Category {
+  id: ID!
+  name: String!
+}
+
+type Tag {
+  tagId: ID!
+  name: String!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  category: Category!
+  tags: [Tag]
+}
+
+input CreatePostInput {
+  userId: ID!
+  title: String!
+  body: String!
+  categoryId: ID!
+  tagsIds: [ID!]
+}
+
+type CreatePostPayload {
+  post: Post
+  errors: [String]
+}
+
+input EditPostInput {
+  userId: ID!
+  postId: ID!
+  title: String!
+  body: String!
+  categoryId: ID!
+  tagsIds: [ID!]
+}
+
+type EditPostPayload {
+  post: Post
+  errors: [String]
+}
+
+input DeletePostInput {
+  userId: ID!
+  postId: ID!
+}
+
+type DeletePostPayload {
+  isDeleteSuccessful: Boolean
+}
+
+input CreateTagInput {
+  name: String!
+}
+
+type CreateTagPayload {
+  tag: Tag
+  errors: [String]
 }
 
 type Query {
-  currentUser: CurrentUser!
+  currentUser: User!
+  post(userId: ID!, postId: ID!): Post
+  posts(userId: ID!): [Post]
+  categories: [Category]
+  tags: [Tag]
 }
 
 type Mutation {
@@ -62,4 +127,8 @@ type Mutation {
   signInUser(input: SignInUserInput!): SignInUserPayload!
   signOutUser(input: SignOutUserInput!): SignOutUserPayload!
   editUser(input: EditUserInput!): EditUserPayload!
+  createPost(input: CreatePostInput!): CreatePostPayload!
+  editPost(input: EditPostInput!): EditPostPayload!
+  deletePost(input: DeletePostInput!): DeletePostPayload!
+  createTag(input: CreateTagInput!): CreateTagPayload!
 }
