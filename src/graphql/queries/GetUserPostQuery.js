@@ -1,8 +1,8 @@
 import graphql from 'babel-plugin-relay/macro';
 
-const GetPostsQuery = graphql`
-    query GetPostsQuery {
-        posts {
+const GetUserPostQuery = graphql`
+    query GetUserPostQuery($userId: ID!, $postId: ID!) {
+        userPost(userId: $userId, postId: $postId) {
           id
           title
           body
@@ -14,13 +14,8 @@ const GetPostsQuery = graphql`
             tagId
             name
           }
-          user {
-            id
-            displayName
-            avatar
-          }
         }
     }
 `
 
-export default GetPostsQuery;
+export default GetUserPostQuery;

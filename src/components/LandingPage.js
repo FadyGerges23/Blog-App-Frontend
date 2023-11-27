@@ -13,7 +13,10 @@ const LandingPage = () => {
     }, [user, navigate]);
 
     return ( 
-        <h2 className="content">Welcome to Blog App!</h2>
+        <div className="center">
+            <h1>Welcome to Blog App!</h1>
+            <button className="custom-button show-posts-button" onClick={() => navigate("/posts")}>Show Posts</button>
+        </div>
      );
 }
  

@@ -5,7 +5,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useLazyLoadQuery, useMutation, useQueryLoader } from 'react-relay';
 import EditPostMutation from "../graphql/mutations/EditPostMutation";
 import PostForm from "./PostForm";
-import GetPostQuery from "../graphql/queries/GetPostQuery";
+import GetUserPostQuery from "../graphql/queries/GetUserPostQuery";
 import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
 import GetTagsQuery from "../graphql/queries/GetTagsQuery";
 
@@ -15,8 +15,8 @@ const EditPost = () => {
     const { id: postId } = useParams()
     const { user } = useContext(UserContext);
     const [commitMutation, isMutationInFlight] = useMutation(EditPostMutation);
-    const data = useLazyLoadQuery(GetPostQuery, {userId: user.id, postId: postId}, { fetchPolicy: 'network-only' });
-    const {title, body, category, tags} = data.post;
+    const data = useLazyLoadQuery(GetUserPostQuery, {userId: user.id, postId: postId}, { fetchPolicy: 'network-only' });
+    const {title, body, category, tags} = data.userPost;
     const [errors, setErrors] = useState([]);
 
     const [

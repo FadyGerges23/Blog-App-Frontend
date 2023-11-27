@@ -67,6 +67,7 @@ type Post {
   body: String!
   category: Category!
   tags: [Tag]
+  user: User
 }
 
 input CreatePostInput {
@@ -116,8 +117,10 @@ type CreateTagPayload {
 
 type Query {
   currentUser: User!
-  post(userId: ID!, postId: ID!): Post
-  posts(userId: ID!): [Post]
+  post(postId: ID!): Post
+  posts: [Post]
+  userPost(userId: ID!, postId: ID!): Post
+  userPosts(userId: ID!): [Post]
   categories: [Category]
   tags: [Tag]
 }

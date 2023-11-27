@@ -19,6 +19,8 @@ import CreatePost from "./components/CreatePost";
 import EditPost from "./components/EditPost";
 import { useLazyLoadQuery } from "react-relay";
 import CurrentUserQuery from "./graphql/queries/CurrentUserQuery";
+import PostDetails from "./components/PostDetails";
+import PostsFetch from "./components/PostsFetch";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +33,8 @@ const router = createBrowserRouter(
       <Route path="/users/:id/edit_profile" element={ <EditProfile /> } />
       <Route path="/users/:id/create_post" element={ <CreatePost /> } />
       <Route path="/users/:user_id/posts/:id/edit" element={ <EditPost /> } />
+      <Route path="/posts" element={ <PostsFetch /> } />
+      <Route path="/posts/:id" element={ <PostDetails /> } />
       <Route path="/unauthorized" element={ <Unauthorized /> } />
     </Route>
   )

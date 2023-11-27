@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2e9e1203bd7d9e2c0a3fb583c0c5277b>>
+ * @generated SignedSource<<105377d76626b95ea0991df161e1b5ea>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "postId"
+    "name": "userId"
   }
 ],
 v1 = {
@@ -36,14 +36,14 @@ v3 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "postId",
-        "variableName": "postId"
+        "name": "userId",
+        "variableName": "userId"
       }
     ],
     "concreteType": "Post",
     "kind": "LinkedField",
-    "name": "post",
-    "plural": false,
+    "name": "userPosts",
+    "plural": true,
     "selections": [
       (v1/*: any*/),
       {
@@ -91,32 +91,6 @@ v3 = [
           (v2/*: any*/)
         ],
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "User",
-        "kind": "LinkedField",
-        "name": "user",
-        "plural": false,
-        "selections": [
-          (v1/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "displayName",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "avatar",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
       }
     ],
     "storageKey": null
@@ -127,7 +101,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "GetPostQuery",
+    "name": "GetUserPostsQuery",
     "selections": (v3/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -136,20 +110,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "GetPostQuery",
+    "name": "GetUserPostsQuery",
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "251b4fc20f10bc940569a3a88de973ad",
+    "cacheID": "05c783b2ff76d93492fb6087a2612d7c",
     "id": null,
     "metadata": {},
-    "name": "GetPostQuery",
+    "name": "GetUserPostsQuery",
     "operationKind": "query",
-    "text": "query GetPostQuery(\n  $postId: ID!\n) {\n  post(postId: $postId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n    tags {\n      tagId\n      name\n    }\n    user {\n      id\n      displayName\n      avatar\n    }\n  }\n}\n"
+    "text": "query GetUserPostsQuery(\n  $userId: ID!\n) {\n  userPosts(userId: $userId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n    tags {\n      tagId\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "b14d059d07dd60849ad4349b762109d2";
+node.hash = "fd7733465252279b5e471e7091950f49";
 
 module.exports = node;

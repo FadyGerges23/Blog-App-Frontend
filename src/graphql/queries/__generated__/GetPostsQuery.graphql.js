@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d1221f130d743e6d044a872c4c5e7773>>
+ * @generated SignedSource<<edf1cc8f38c4dee5fa4764a226d1bc7f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,43 +9,30 @@
 'use strict';
 
 var node = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "userId"
-  }
-],
-v1 = {
+var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = {
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v3 = [
+v2 = [
   {
     "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "userId",
-        "variableName": "userId"
-      }
-    ],
+    "args": null,
     "concreteType": "Post",
     "kind": "LinkedField",
     "name": "posts",
     "plural": true,
     "selections": [
-      (v1/*: any*/),
+      (v0/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -68,8 +55,8 @@ v3 = [
         "name": "category",
         "plural": false,
         "selections": [
-          (v1/*: any*/),
-          (v2/*: any*/)
+          (v0/*: any*/),
+          (v1/*: any*/)
         ],
         "storageKey": null
       },
@@ -88,7 +75,33 @@ v3 = [
             "name": "tagId",
             "storageKey": null
           },
-          (v2/*: any*/)
+          (v1/*: any*/)
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          (v0/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "displayName",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "avatar",
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
@@ -98,32 +111,32 @@ v3 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
     "name": "GetPostsQuery",
-    "selections": (v3/*: any*/),
+    "selections": (v2/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Operation",
     "name": "GetPostsQuery",
-    "selections": (v3/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "299d3bf6997bac6494423e000a71bbfd",
+    "cacheID": "ebdd5249759a8c251437ffaa8f8d17c6",
     "id": null,
     "metadata": {},
     "name": "GetPostsQuery",
     "operationKind": "query",
-    "text": "query GetPostsQuery(\n  $userId: ID!\n) {\n  posts(userId: $userId) {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n    tags {\n      tagId\n      name\n    }\n  }\n}\n"
+    "text": "query GetPostsQuery {\n  posts {\n    id\n    title\n    body\n    category {\n      id\n      name\n    }\n    tags {\n      tagId\n      name\n    }\n    user {\n      id\n      displayName\n      avatar\n    }\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "e528bcb84aa5b1ee869272ac94c40ec1";
+node.hash = "f81806461d11629d4ab7ce03c688fe84";
 
 module.exports = node;
