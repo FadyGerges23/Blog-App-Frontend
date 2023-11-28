@@ -3,11 +3,9 @@ import { useMutation } from "react-relay";
 import DeletePostMutation from "../graphql/mutations/DeletePostMutation";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 
 
 const DeletePostButton = ({ postId, currentPosts, setCurrentPosts }) => {
-    const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [commitMutation, isMutationInFlight] = useMutation(DeletePostMutation);
     
@@ -36,7 +34,6 @@ const DeletePostButton = ({ postId, currentPosts, setCurrentPosts }) => {
             },
             onCompleted: () => {
                 setCurrentPosts(currentPosts.filter(post => post.id !== postId))
-                navigate(`/users/${user.id}/home`);
             },
             onError: (error) => {
                 console.log("Error:", error)

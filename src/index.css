@@ -225,11 +225,6 @@ ul {
   color: #555;
 }
 
-.post > button {
-  left: 0;
-  margin-right: 10px;
-}
-
 .select {
   margin-top: 4px;
   margin-bottom: 20px;
@@ -305,4 +300,9 @@ ul {
   background-color: #007bff;
   color: #fff;
   border-color: #007bff;
+}
+
+.actions > button {
+  left: 0;
+  margin-right: 10px;
 }

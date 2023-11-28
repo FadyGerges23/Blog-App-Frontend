@@ -10,7 +10,7 @@ const PostsFetch = ({ title }) => {
       ] = useQueryLoader(GetPostsQuery);
 
       useEffect(() => {
-        loadGetPostsQuery({ pageNumber: "1" });
+        loadGetPostsQuery({ pageNumber: "1" }, { fetchPolicy: 'network-only' });
       }, [loadGetPostsQuery]);
     
     return ( 

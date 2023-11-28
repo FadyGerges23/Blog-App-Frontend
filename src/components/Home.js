@@ -32,7 +32,7 @@ const Home = () => {
             navigate('/users/sign_in');
         }
 
-        loadGetPostsQuery({ pageNumber: "1" });
+        loadGetPostsQuery({ pageNumber: "1" }, { fetchPolicy: 'network-only' });
     }, [id, user, navigate, loadGetPostsQuery]);
 
     useEffect(() => {
@@ -94,8 +94,10 @@ const Home = () => {
                                                 }
                                                 <br />
                                                 <br />
-                                                <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`)}>Edit</button>
-                                                <DeletePostButton postId={post.id} currentPosts={currentPosts} setCurrentPosts={setCurrentPosts} />
+                                                <div className="actions">
+                                                    <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`)}>Edit</button>
+                                                    <DeletePostButton postId={post.id} currentPosts={currentPosts} setCurrentPosts={setCurrentPosts} />
+                                                </div>
                                             </div>
                                         )
                                     })}
