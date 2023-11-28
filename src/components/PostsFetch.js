@@ -10,11 +10,13 @@ const PostsFetch = ({ title }) => {
       ] = useQueryLoader(GetPostsQuery);
 
       useEffect(() => {
-        loadGetPostsQuery();
+        loadGetPostsQuery({ pageNumber: "1" });
       }, [loadGetPostsQuery]);
     
     return ( 
-        getPostsQueryRef && <PostsList queryRef={getPostsQueryRef} title={title} />
+        <div>
+          { getPostsQueryRef && <PostsList queryRef={getPostsQueryRef} title={title} loadGetPostsQuery={loadGetPostsQuery} /> }
+        </div>
      );
 }
  

@@ -285,3 +285,24 @@ ul {
 .show-posts-button {
   left: 0;
 }
+
+.page-indicator {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.page-indicator button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.page-indicator button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}

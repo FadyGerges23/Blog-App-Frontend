@@ -2,13 +2,22 @@ import { useNavigate } from "react-router-dom";
 import GetPostsQuery from "../graphql/queries/GetPostsQuery";
 import { usePreloadedQuery } from "react-relay";
 import baseUrl from "../constants/baseUrl";
+import { useState } from "react";
+import PageIndicator from "./PageIndicator";
 
-const PostsList = ({ queryRef, title }) => {
+const PostsList = ({ queryRef, title, loadGetPostsQuery }) => {
     const navigate = useNavigate();
-    const { posts } = usePreloadedQuery(
+    const [currentPage, setCurrentPage] = useState(1);
+    
+    const { pagePosts: posts, pagesCount } = usePreloadedQuery(
         GetPostsQuery,
         queryRef,
-      );
+      ).posts;
+
+      const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        loadGetPostsQuery({ pageNumber: pageNumber.toString() });
+      };
     
     return ( 
         <div>
@@ -33,6 +42,11 @@ const PostsList = ({ queryRef, title }) => {
                     </div>
                 }
             </div>
+            <PageIndicator
+                totalPages={pagesCount}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+          />
         </div>
      );
 }

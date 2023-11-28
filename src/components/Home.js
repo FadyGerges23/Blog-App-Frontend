@@ -7,13 +7,16 @@ import GetUserPostsQuery from "../graphql/queries/GetUserPostsQuery";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import PostsList from "./PostsList";
 import GetPostsQuery from "../graphql/queries/GetPostsQuery";
+import PageIndicator from "./PageIndicator";
 
 const Home = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useContext(UserContext);
-    const postsQueryData = useLazyLoadQuery(GetUserPostsQuery, {userId: user.id}, { fetchPolicy: 'network-only' });
-    const [currentPosts, setCurrentPosts] = useState(postsQueryData.userPosts);
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsQueryData = useLazyLoadQuery(GetUserPostsQuery, {userId: user.id, pageNumber: currentPage.toString()}, { fetchPolicy: 'network-only' });
+    const { pagePosts, pagesCount } = postsQueryData.userPosts;
+    const [currentPosts, setCurrentPosts] = useState(pagePosts);
     const [postsType, setPostsType] = useState("All Posts")
 
     const [
@@ -29,12 +32,22 @@ const Home = () => {
             navigate('/users/sign_in');
         }
 
-        loadGetPostsQuery();
+        loadGetPostsQuery({ pageNumber: "1" });
     }, [id, user, navigate, loadGetPostsQuery]);
 
+    useEffect(() => {
+        setCurrentPosts(postsQueryData.userPosts.pagePosts);     
+    }, [postsQueryData])
+
     const handleToggle = (event, toggleValue) => {
-        setPostsType(toggleValue);
+        if (toggleValue) {
+            setPostsType(toggleValue);
+        }
     };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+      };
 
     return ( 
         <div>
@@ -59,7 +72,7 @@ const Home = () => {
                     
                     {
                         postsType === "All Posts" ?
-                            ( getPostsQueryRef && <PostsList queryRef={getPostsQueryRef} title={postsType} /> )
+                            ( getPostsQueryRef && <PostsList queryRef={getPostsQueryRef} title={postsType} loadGetPostsQuery={loadGetPostsQuery} /> )
                             :
                             currentPosts.length === 0 ? <div></div> :
                                 <div className="post-list">
@@ -81,13 +94,19 @@ const Home = () => {
                                                 }
                                                 <br />
                                                 <br />
-                                                <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`, { state: post })}>Edit</button>
+                                                <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`)}>Edit</button>
                                                 <DeletePostButton postId={post.id} currentPosts={currentPosts} setCurrentPosts={setCurrentPosts} />
                                             </div>
                                         )
                                     })}
                                 </div>
                             }
+                            { postsType === "My Posts" 
+                            && <PageIndicator
+                                totalPages={pagesCount}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            /> }
                             <button className="custom-button" onClick={ () => navigate(`/users/${user.id}/create_post`) }>Create Post</button>
                 </div>
             }
