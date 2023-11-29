@@ -1,40 +1,64 @@
 import { useNavigate } from "react-router-dom";
 import GetPostsQuery from "../graphql/queries/GetPostsQuery";
-import { usePreloadedQuery } from "react-relay";
+import { usePreloadedQuery, useQueryLoader } from "react-relay";
 import baseUrl from "../constants/baseUrl";
 import { useContext, useEffect, useState } from "react";
 import PageIndicator from "./PageIndicator";
 import { UserContext } from "../contexts/UserContext";
 import DeletePostButton from "./DeletePostButton";
+import SearchFilters from "./SearchFilters";
+import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
+import GetTagsQuery from "../graphql/queries/GetTagsQuery";
 
 const PostsList = ({ queryRef, title, loadGetPostsQuery }) => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchFilters, setSearchFilters] = useState({});
     
     const { pagePosts, pagesCount } = usePreloadedQuery(
         GetPostsQuery,
         queryRef,
-      ).posts;
+    ).posts;
 
-      const [currentPosts, setCurrentPosts] = useState(pagePosts);
+    const [currentPosts, setCurrentPosts] = useState(pagePosts);
 
-      const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-        loadGetPostsQuery({ pageNumber: pageNumber.toString() }, { fetchPolicy: 'network-only' });
-      };
+    const [
+        getCategoriesQueryRef,
+        loadGetCategoriesQuery,
+    ] = useQueryLoader(GetCategoriesQuery);
 
-      useEffect(() => {
+    const [
+        getTagsQueryRef,
+        loadGetTagsQuery,
+    ] = useQueryLoader(GetTagsQuery);
+
+    useEffect(() => {
+            loadGetCategoriesQuery();
+            loadGetTagsQuery();
+    }, [loadGetCategoriesQuery, loadGetTagsQuery]);
+
+    useEffect(() => {
         setCurrentPosts(pagePosts);
-      }, [pagePosts]);
+    }, [pagePosts]);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        loadGetPostsQuery({...searchFilters, pageNumber: pageNumber.toString()}, { fetchPolicy: 'network-only' });
+    };
+
+    const reload = (params) => {
+        loadGetPostsQuery(params, { fetchPolicy: 'network-only' })        
+    }
     
     return ( 
         <div>
             <div>
                 { !title && <h1 className="home-header">Posts</h1> }
-                { currentPosts.length === 0 ? <div></div> :
-                    <div className="post-list">
-                        {currentPosts.map(post => {
+                <div className="post-list">
+                    { getCategoriesQueryRef && getTagsQueryRef && <SearchFilters categoriesQueryRef={getCategoriesQueryRef} tagsQueryRef={getTagsQueryRef} reload={reload} pageNumber={currentPage} postsType="All Posts" setSearchFilters={setSearchFilters} /> }
+                    { currentPosts.length === 0 ? <div></div> :
+                        currentPosts.map(post => {
                             return (
                                 <div key={post.id} className="post">
                                     <h2 className="post-title">{ post.title }</h2>
@@ -65,9 +89,8 @@ const PostsList = ({ queryRef, title, loadGetPostsQuery }) => {
                                     }
                                 </div>
                             )
-                        })}
-                    </div>
-                }
+                    })}
+                </div>
             </div>
             <PageIndicator
                 totalPages={pagesCount}

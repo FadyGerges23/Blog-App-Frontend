@@ -123,9 +123,9 @@ type CreateTagPayload {
 type Query {
   currentUser: User!
   post(postId: ID!): Post
-  posts(pageNumber: String): PaginatedPostType
+  posts(pageNumber: String, title: String, description: String, categoryId: ID, tagsIds: [ID!]): PaginatedPostType
   userPost(userId: ID!, postId: ID!): Post
-  userPosts(userId: ID!, pageNumber: String): PaginatedPostType
+  userPosts(userId: ID!, pageNumber: String, title: String, description: String, categoryId: ID, tagsIds: [ID!]): PaginatedPostType
   categories: [Category]
   tags: [Tag]
 }

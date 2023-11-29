@@ -1,4 +1,3 @@
-import Home from "./components/Home";
 import SignInForm from "./components/SignInForm";
 import SignupForm from "./components/SignupForm";
 import ViewProfile from './components/ViewProfile';
@@ -21,12 +20,13 @@ import { useLazyLoadQuery } from "react-relay";
 import CurrentUserQuery from "./graphql/queries/CurrentUserQuery";
 import PostDetails from "./components/PostDetails";
 import PostsFetch from "./components/PostsFetch";
+import UserPostsFetch from "./components/UserPostsFetch";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={ <RootLayout /> }>
       <Route index element={ <LandingPage /> } />
-      <Route path="/users/:id/home" element={ <Home /> } />
+      <Route path="/users/:id/home" element={ <UserPostsFetch /> } />
       <Route path="/users/sign_up" element={ <SignupForm /> } />
       <Route path="/users/sign_in" element={ <SignInForm /> } />
       <Route path="/users/:id/profile" element={ <ViewProfile /> } />

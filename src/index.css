@@ -100,6 +100,7 @@ button[type="submit"] {
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s;
+  margin-bottom: 15px;
 }
 
 button[type="submit"]:hover {
@@ -305,4 +306,21 @@ ul {
 .actions > button {
   left: 0;
   margin-right: 10px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.filter-fields {
+  width: 80px;
+  height: 10px;
+}
+
+.filter-label {
+  margin-bottom: 15px;
+  margin-top: 0px;
 }

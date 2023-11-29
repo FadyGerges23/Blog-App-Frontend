@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<79ce08151c1fbd29a99ecbe98728848e>>
+ * @generated SignedSource<<a3742e57a1458586e53be611dde5dd31>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,35 +12,75 @@ var node = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "pageNumber"
+  "name": "categoryId"
 },
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "userId"
+  "name": "description"
 },
 v2 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "pageNumber"
+},
+v3 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "tagsIds"
+},
+v4 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "title"
+},
+v5 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "userId"
+},
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v4 = [
+v8 = [
   {
     "alias": null,
     "args": [
       {
         "kind": "Variable",
+        "name": "categoryId",
+        "variableName": "categoryId"
+      },
+      {
+        "kind": "Variable",
+        "name": "description",
+        "variableName": "description"
+      },
+      {
+        "kind": "Variable",
         "name": "pageNumber",
         "variableName": "pageNumber"
+      },
+      {
+        "kind": "Variable",
+        "name": "tagsIds",
+        "variableName": "tagsIds"
+      },
+      {
+        "kind": "Variable",
+        "name": "title",
+        "variableName": "title"
       },
       {
         "kind": "Variable",
@@ -61,7 +101,7 @@ v4 = [
         "name": "pagePosts",
         "plural": true,
         "selections": [
-          (v2/*: any*/),
+          (v6/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -84,8 +124,8 @@ v4 = [
             "name": "category",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/)
+              (v6/*: any*/),
+              (v7/*: any*/)
             ],
             "storageKey": null
           },
@@ -104,7 +144,7 @@ v4 = [
                 "name": "tagId",
                 "storageKey": null
               },
-              (v3/*: any*/)
+              (v7/*: any*/)
             ],
             "storageKey": null
           }
@@ -126,36 +166,44 @@ return {
   "fragment": {
     "argumentDefinitions": [
       (v0/*: any*/),
-      (v1/*: any*/)
+      (v1/*: any*/),
+      (v2/*: any*/),
+      (v3/*: any*/),
+      (v4/*: any*/),
+      (v5/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
     "name": "GetUserPostsQuery",
-    "selections": (v4/*: any*/),
+    "selections": (v8/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
+      (v5/*: any*/),
+      (v2/*: any*/),
+      (v4/*: any*/),
       (v1/*: any*/),
-      (v0/*: any*/)
+      (v0/*: any*/),
+      (v3/*: any*/)
     ],
     "kind": "Operation",
     "name": "GetUserPostsQuery",
-    "selections": (v4/*: any*/)
+    "selections": (v8/*: any*/)
   },
   "params": {
-    "cacheID": "f9c89e4ce0a047bf4bf6528bb6f1de5a",
+    "cacheID": "33c5ecc015c8fe3a0f7524fc6bfd129d",
     "id": null,
     "metadata": {},
     "name": "GetUserPostsQuery",
     "operationKind": "query",
-    "text": "query GetUserPostsQuery(\n  $userId: ID!\n  $pageNumber: String\n) {\n  userPosts(userId: $userId, pageNumber: $pageNumber) {\n    pagePosts {\n      id\n      title\n      body\n      category {\n        id\n        name\n      }\n      tags {\n        tagId\n        name\n      }\n    }\n    pagesCount\n  }\n}\n"
+    "text": "query GetUserPostsQuery(\n  $userId: ID!\n  $pageNumber: String\n  $title: String\n  $description: String\n  $categoryId: ID\n  $tagsIds: [ID!]\n) {\n  userPosts(userId: $userId, pageNumber: $pageNumber, title: $title, description: $description, categoryId: $categoryId, tagsIds: $tagsIds) {\n    pagePosts {\n      id\n      title\n      body\n      category {\n        id\n        name\n      }\n      tags {\n        tagId\n        name\n      }\n    }\n    pagesCount\n  }\n}\n"
   }
 };
 })();
 
-node.hash = "e7cd6ca327c54767fbf61a23c3e9bfe0";
+node.hash = "7d126189c2580c6006a19fb3b0d9370d";
 
 module.exports = node;

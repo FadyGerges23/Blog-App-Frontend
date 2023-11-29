@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useLazyLoadQuery, useQueryLoader } from "react-relay";
+import { usePreloadedQuery, useQueryLoader } from "react-relay";
 import { UserContext } from "../contexts/UserContext";
 import DeletePostButton from "./DeletePostButton";
 import GetUserPostsQuery from "../graphql/queries/GetUserPostsQuery";
@@ -8,21 +8,39 @@ import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import PostsList from "./PostsList";
 import GetPostsQuery from "../graphql/queries/GetPostsQuery";
 import PageIndicator from "./PageIndicator";
+import SearchFilters from "./SearchFilters";
+import GetCategoriesQuery from "../graphql/queries/GetCategoriesQuery";
+import GetTagsQuery from "../graphql/queries/GetTagsQuery";
 
-const Home = () => {
+const Home = ({ userPostsQueryRef, loadGetUserPostsQuery }) => {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useContext(UserContext);
     const [currentPage, setCurrentPage] = useState(1);
-    const postsQueryData = useLazyLoadQuery(GetUserPostsQuery, {userId: user.id, pageNumber: currentPage.toString()}, { fetchPolicy: 'network-only' });
-    const { pagePosts, pagesCount } = postsQueryData.userPosts;
-    const [currentPosts, setCurrentPosts] = useState(pagePosts);
     const [postsType, setPostsType] = useState("All Posts")
+
+    const { pagePosts, pagesCount } = usePreloadedQuery(
+        GetUserPostsQuery,
+        userPostsQueryRef,
+      ).userPosts;
+
+    const [currentPosts, setCurrentPosts] = useState(pagePosts);
+    const [searchFilters, setSearchFilters] = useState({});
 
     const [
         getPostsQueryRef,
         loadGetPostsQuery,
       ] = useQueryLoader(GetPostsQuery);
+
+    const [
+        getCategoriesQueryRef,
+        loadGetCategoriesQuery,
+        ] = useQueryLoader(GetCategoriesQuery);
+
+    const [
+        getTagsQueryRef,
+        loadGetTagsQuery,
+        ] = useQueryLoader(GetTagsQuery);
     
     useEffect(() => {
         if(id !== user.id) {
@@ -33,21 +51,30 @@ const Home = () => {
         }
 
         loadGetPostsQuery({ pageNumber: "1" }, { fetchPolicy: 'network-only' });
-    }, [id, user, navigate, loadGetPostsQuery]);
+        loadGetCategoriesQuery();
+        loadGetTagsQuery();
+    }, [id, user, navigate, loadGetPostsQuery, loadGetCategoriesQuery, loadGetTagsQuery]);
 
     useEffect(() => {
-        setCurrentPosts(postsQueryData.userPosts.pagePosts);     
-    }, [postsQueryData])
+        setCurrentPosts(pagePosts);     
+    }, [pagePosts])
 
     const handleToggle = (event, toggleValue) => {
         if (toggleValue) {
             setPostsType(toggleValue);
+            loadGetPostsQuery({ pageNumber: "1" }, { fetchPolicy: 'network-only' });
+            loadGetUserPostsQuery({ userId: user.id, pageNumber: "1" }, { fetchPolicy: 'network-only' });
         }
     };
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-      };
+        loadGetUserPostsQuery({...searchFilters, pageNumber: pageNumber.toString(), userId: user.id}, { fetchPolicy: 'network-only' });
+    };
+
+    const reload = (params) => {
+       loadGetUserPostsQuery(params)
+    }
 
     return ( 
         <div>
@@ -76,6 +103,7 @@ const Home = () => {
                             :
                             currentPosts.length === 0 ? <div></div> :
                                 <div className="post-list">
+                                    { getCategoriesQueryRef && getTagsQueryRef && <SearchFilters categoriesQueryRef={getCategoriesQueryRef} tagsQueryRef={getTagsQueryRef} reload={reload} pageNumber={currentPage} postsType="My Posts" setSearchFilters={setSearchFilters} /> }
                                     {currentPosts.map(post => {
                                         return (
                                             <div key={post.id} className="post">
