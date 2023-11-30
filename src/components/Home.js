@@ -102,42 +102,46 @@ const Home = ({ userPostsQueryRef, loadGetUserPostsQuery }) => {
                             ( getPostsQueryRef && <PostsList queryRef={getPostsQueryRef} title={postsType} loadGetPostsQuery={loadGetPostsQuery} /> )
                             :
                             currentPosts.length === 0 ? <div></div> :
-                                <div className="post-list">
-                                    { getCategoriesQueryRef && getTagsQueryRef && <SearchFilters categoriesQueryRef={getCategoriesQueryRef} tagsQueryRef={getTagsQueryRef} reload={reload} pageNumber={currentPage} postsType="My Posts" setSearchFilters={setSearchFilters} /> }
-                                    {currentPosts.map(post => {
-                                        return (
-                                            <div key={post.id} className="post">
-                                                <div className="post-header">
-                                                    <h2 className="post-title">{ post.title }</h2>
-                                                    <p className="post-category">{ post.category.name }</p>
+                                <div>
+                                    <div className="post-list">
+                                        { getCategoriesQueryRef && getTagsQueryRef && <SearchFilters categoriesQueryRef={getCategoriesQueryRef} tagsQueryRef={getTagsQueryRef} reload={reload} pageNumber={currentPage} postsType="My Posts" setSearchFilters={setSearchFilters} /> }
+                                        {currentPosts.map(post => {
+                                            return (
+                                                <div key={post.id} className="post">
+                                                    <div className="post-header">
+                                                        <h2 className="post-title">{ post.title }</h2>
+                                                        <p className="post-category">{ post.category.name }</p>
+                                                    </div>
+                                                    <p className="post-body">{ post.body }</p>
+                                                    { post.tags.map(tag => {
+                                                        return (
+                                                            <div key={tag.tagId} className="tags-list">
+                                                                <div className="tag">#{tag.name}</div>
+                                                            </div>     
+                                                        )
+                                                    }) 
+                                                    }
+                                                    <br />
+                                                    <br />
+                                                    <div className="actions">
+                                                        <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`)}>Edit</button>
+                                                        <DeletePostButton postId={post.id} currentPosts={currentPosts} setCurrentPosts={setCurrentPosts} />
+                                                    </div>
                                                 </div>
-                                                <p className="post-body">{ post.body }</p>
-                                                { post.tags.map(tag => {
-                                                    return (
-                                                        <div key={tag.tagId} className="tags-list">
-                                                            <div className="tag">#{tag.name}</div>
-                                                        </div>     
-                                                    )
-                                                }) 
-                                                }
-                                                <br />
-                                                <br />
-                                                <div className="actions">
-                                                    <button className="custom-button" onClick={() => navigate(`/users/${user.id}/posts/${post.id}/edit`)}>Edit</button>
-                                                    <DeletePostButton postId={post.id} currentPosts={currentPosts} setCurrentPosts={setCurrentPosts} />
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
+                                            )
+                                        })}
+                                    </div>
+
+                                    <PageIndicator
+                                        totalPages={pagesCount}
+                                        currentPage={currentPage}
+                                        onPageChange={handlePageChange}
+                                    />
                                 </div>
+                                
                             }
-                            { postsType === "My Posts" 
-                            && <PageIndicator
-                                totalPages={pagesCount}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
-                            /> }
-                            <button className="custom-button" onClick={ () => navigate(`/users/${user.id}/create_post`) }>Create Post</button>
+                         
+                            <button className="custom-button create-post" onClick={ () => navigate(`/users/${user.id}/create_post`) }>Create Post</button>
                 </div>
             }
         </div>
