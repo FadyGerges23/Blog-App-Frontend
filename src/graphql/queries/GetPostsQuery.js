@@ -1,19 +1,27 @@
 import graphql from 'babel-plugin-relay/macro';
 
 const GetPostsQuery = graphql`
-    query GetPostsQuery($userId: ID!) {
-        posts(userId: $userId) {
+    query GetPostsQuery($pageNumber: String, $title: String, $description: String, $categoryId: ID, $tagsIds: [ID!]) {
+        posts(pageNumber: $pageNumber, title: $title, description: $description, categoryId: $categoryId, tagsIds: $tagsIds) {
+          pagePosts {
             id
             title
             body
             category {
-                id
-                name
+              id
+              name
             }
             tags {
-                tagId
-                name
+              tagId
+              name
             }
+            user {
+              id
+              displayName
+              avatar
+            }
+          }
+          pagesCount
         }
     }
 `

@@ -67,6 +67,12 @@ type Post {
   body: String!
   category: Category!
   tags: [Tag]
+  user: User
+}
+
+type PaginatedPostType {
+  pagePosts: [Post]
+  pagesCount: Int
 }
 
 input CreatePostInput {
@@ -116,8 +122,10 @@ type CreateTagPayload {
 
 type Query {
   currentUser: User!
-  post(userId: ID!, postId: ID!): Post
-  posts(userId: ID!): [Post]
+  post(postId: ID!): Post
+  posts(pageNumber: String, title: String, description: String, categoryId: ID, tagsIds: [ID!]): PaginatedPostType
+  userPost(userId: ID!, postId: ID!): Post
+  userPosts(userId: ID!, pageNumber: String, title: String, description: String, categoryId: ID, tagsIds: [ID!]): PaginatedPostType
   categories: [Category]
   tags: [Tag]
 }

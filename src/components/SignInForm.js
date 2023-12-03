@@ -65,7 +65,6 @@ const SignInForm = () => {
                             if(response.signInUser.errors.length > 0) {
                                 setErrors(response.signInUser.errors)
                             } else {
-                                console.log(response.signInUser.user)
                                 signUser(response.signInUser.user)
                                 Cookies.set('user', JSON.stringify(response.signInUser.user), { expires: 7 });
                                 navigate(`/users/${response.signInUser.user.id}/home`);
